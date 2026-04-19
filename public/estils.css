@@ -83,17 +83,19 @@ svg {
     fill: #363537;
 }
 
-/* Hide radio buttons */
-.dashboard-main-div input {
-    display: none;
-}
-
 .dashboard-main-div {
+    display: flex;
     background-color: rgb(236, 237, 238);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
     height: 600px;
     border-radius: 20px;
     overflow: hidden;
     align-self: center;
+}
+
+/* Hide radio buttons */
+.dashboard-main-div input {
+    display: none;
 }
 
 .side-bar {
@@ -133,6 +135,96 @@ svg {
 .tab-img img {
     height: 75%;
     width: auto;
+}
+
+.tab-content {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+    width: 80%;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Active tab styling */
+body:has(#tab1:checked) .side-bar .tabButton1,
+body:has(#tab2:checked) .side-bar .tabButton2 {
+    background-color: #0eb1ca;
+}
+
+body:has(#tab1:checked) .content-1,
+body:has(#tab2:checked) .content-2 {
+    display: flex;
+}
+
+.top-tab {
+    display: flex;
+    height: 15%;
+    align-items: center;
+}
+
+.tab-title {
+    font-size: 50px;
+    margin: 0px;
+    margin-left: 30px;
+}
+
+.kpi-content {
+    display: flex;
+    flex-direction: row;
+    height: 85%;
+    width: 100%;
+}
+
+.kpi-stats {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 30px;
+    padding: 30px;
+    box-sizing: border-box;
+    height: 100%;
+    width: 60%;
+}
+
+.kpi-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    background-color: rgb(245 247 249);
+    box-sizing: border-box;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.kpi-block-title {
+    font-size: 25px;
+    margin: 0;
+}
+
+.kpi-block-value {
+    align-content: center;
+    font-size: 70px;
+    margin: 0;
+}
+
+.kpi-stock {
+    height: 100%;
+    width: 40%;
+    background-color: #3533bb;
 }
 
 footer {
