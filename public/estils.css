@@ -224,7 +224,79 @@ body:has(#tab2:checked) .content-2 {
 .kpi-stock {
     height: 100%;
     width: 40%;
-    background-color: #3533bb;
+    padding: 30px 30px 30px 0px;
+    box-sizing: border-box;
+}
+
+.kpi-stock-table-div {
+    display: flex;
+    flex-direction: column;
+    background-color: #aaaab4;
+    border-radius: 10px;
+    height: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+    background-color: rgb(245 247 249);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.kpi-stock-table {
+    border-collapse: collapse;
+}
+
+.kpi-stock-table thead {
+    position: sticky;
+    box-shadow: 0 5px 10px #ffffff;
+}
+
+.kpi-stock-table th, .kpi-stock-table td {
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.kpi-stock-table th {
+    background-color: #ffffff;
+}
+
+.kpi-stock-table tr:nth-child(odd) {
+    background-color: #F5F6FB;
+}
+
+.kpi-stock-table tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+.kpi-stock-table td {
+    max-width: 130px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.stock-cell {
+    text-align: center;
+}
+
+.ok-stock {
+    background-color: #C8E7C8;
+    color: #388e3c;
+}
+
+.low-stock {
+    background-color: #FFF0C8;
+    color: #a68b00;
+}
+
+.critic-stock {
+    background-color: #FFCED2;
+    color: #c62828;
+}
+
+.listado-content {
+    display: flex;
+    flex-direction: row;
+    height: 85%;
+    width: 100%;
 }
 
 footer {
