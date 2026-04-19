@@ -71,7 +71,7 @@ app.get('/', async (req, res) => {
     // Renderitzar la plantilla amb les dades
     res.render('index', {
         ...data,
-        currentPage: 'home'
+        currentPage: 'Dashboard',
     });
   } catch (err) {
     console.error(err);

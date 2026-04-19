@@ -1,23 +1,31 @@
 body {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Baloo 2', sans-serif;
     display: flex;
+    align-items: center;
     flex-direction: column;
     min-height: 100vh;
+    background-color: #ffffff;
+    color: #363537;
 }
 
 main {
     flex: 1;
 }
 
+.container {
+    width: 71rem;
+}
+
 .navbar {
     display: flex;
-    justify-content: space-between;
+    justify-content: left;
+    justify-self: center;
     align-items: center;
     height: 70px;
     padding: 0 2rem;
-    background-color: #1f2937;
     position: sticky;
+    width: 70%;
     top: 0;
     z-index: 1000;
 }
@@ -39,33 +47,49 @@ main {
     list-style: none;
     display: flex;
     gap: 2rem;
-    margin: 0;
+    margin: 0 50px;
     padding: 0;
 }
 
 .nav-links li a {
     text-decoration: none;
-    color: #ffffff;
-    font-weight: 500;
+    font-weight: 600;
+    color: #363537;
     transition: color 0.2s ease;
 }
 
 .nav-links li a:hover {
-    color: #fbbf24;
+    color: #1AAE5E;
 }
 
 .active {
-    border-bottom: 2px solid #fbbf24;
+    border-bottom: 2px solid #1AAE5E;
     padding-bottom: 4px;
 }
 
+.svg-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.themes-button {
+    width: 100%;
+    justify-content: right;
+}
+
+svg {
+    fill: #363537;
+}
+
 footer {
-    background-color: #1f2937;
-    color: #ffffff;
+    background-color: rgb(245 247 249);
+    color: #363537;
     text-align: center;
     padding: 1rem 0;
     font-size: 0.9rem;
-    border-top: 1px solid #374151;
+    width: 100%;
+    font-weight: 700;
 }
 
 footer span {
