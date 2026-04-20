@@ -333,6 +333,7 @@ body:has(#dot3:checked) #kpi-detail3 {
 
 .kpi-block-title-detail {
     font-size: 20px;
+    height: 30%;
     line-height: 1.2;
     margin: 0;
 }
@@ -340,6 +341,13 @@ body:has(#dot3:checked) #kpi-detail3 {
 .kpi-block-value {
     align-content: center;
     font-size: 70px;
+    margin: 0;
+}
+
+.kpi-block-value-detail {
+    align-content: center;
+    font-size: 50px;
+    height: 70%;
     margin: 0;
 }
 
@@ -390,6 +398,19 @@ body:has(#dot3:checked) #kpi-detail3 {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
+.kpi-stock-table-div-detail {
+    display: flex;
+    flex-direction: column;
+    background-color: #aaaab4;
+    border-radius: 10px;
+    height: 90%;
+    width: 90%;
+    overflow: hidden;
+    box-sizing: border-box;
+    background-color: rgb(245 247 249);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
 .kpi-stock-table {
     border-collapse: collapse;
 }
@@ -423,7 +444,7 @@ body:has(#dot3:checked) #kpi-detail3 {
     text-overflow: ellipsis;
 }
 
-.stock-cell {
+.centered-cell {
     text-align: center;
 }
 
