@@ -1,5 +1,8 @@
 
 <main>
+
+    <h1 class="dashboard-title">Dashboard</h1>
+
     <div class="container dashboard-main-div">
 
         <!-- Radio buttons for state management -->
@@ -186,6 +189,7 @@
                     <div class="kpi-stock-table-div-detail">
                         <h3 class="kpi-stock-title">Stock bajo</h3>
                         <table class="kpi-stock-table">
+
                             <thead>
                                 <tr>
                                     <th style="text-align: left;">ID</th>
@@ -240,9 +244,70 @@
         <div class="tab-content content-2">
             <div class="top-tab">
                 <h2 class="tab-title">Listados</h2>
+
+                <p>Colores Stock</p>
+
+                <input type="checkbox" id="toggle-colors">
+
+                <label class="toggle" for="toggle-colors">
+                    <span class="slider"></span>
+                </label>
             </div>
             <div class="listado-content">
-                
+                <div class="listado-table-div">
+                    <h3 class="kpi-stock-title">Ultimas 5 ventas</h3>
+                    <table class="kpi-stock-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">Fecha</th>
+                                <th style="text-align: left;">Cliente</th>
+                                <th style="text-align: left;">Total</th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td>1</td>
+                            <td>Mesa Estudio</td>
+                            <td>Muebles</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Ordenador Sobremesa</td>
+                            <td>Electrodoméstico</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Escultura Piedra</td>
+                            <td>Decoración</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="listado-table-div">
+                    <h3 class="kpi-stock-title">Top 5 más vendidos</h3>
+                    <table class="kpi-stock-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">Fecha</th>
+                                <th style="text-align: left;">Cliente</th>
+                                <th style="text-align: left;">Total</th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td>1</td>
+                            <td>Mesa Estudio</td>
+                            <td>Muebles</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Ordenador Sobremesa</td>
+                            <td>Electrodoméstico</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Escultura Piedra</td>
+                            <td>Decoración</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
