@@ -86,7 +86,7 @@ svg {
     fill: #363537;
 }
 
-.dashboard-title {
+.page-title {
     font-size: 50px;
     text-align: center;
     margin-top: 50px;
@@ -546,4 +546,72 @@ footer {
 
 footer span {
     color: #fbbf24;
+}
+
+/* Estilos de las tablas de productos, clientes y ventas */
+
+.big-table-div {
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    overflow: hidden;
+    box-sizing: border-box;
+    background-color: rgb(245 247 249);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.big-table {
+    border-collapse: collapse;
+}
+
+.big-table thead {
+    position: sticky;
+    box-shadow: 0 5px 10px #ffffff;
+}
+
+.big-table th, .big-table td {
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.big-table th {
+    background-color: #ffffff;
+}
+
+.big-table tr:nth-child(odd) {
+    background-color: #F5F6FB;
+}
+
+.big-table tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+.big-table td {
+    max-width: 130px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.centered-cell {
+    text-align: center;
+}
+
+.id-cell {
+    text-align: right;
+}
+
+.ok-stock {
+    background-color: #C8E7C8;
+    color: #388e3c;
+}
+
+.low-stock {
+    background-color: #FFF0C8;
+    color: #a68b00;
+}
+
+.critic-stock {
+    background-color: #FFCED2;
+    color: #c62828;
 }

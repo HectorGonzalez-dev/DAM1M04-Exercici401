@@ -79,6 +79,29 @@ app.get('/', async (req, res) => {
   }
 });
 
+app.get('/products', async (req, res) => {
+  try {
+    // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
+    const commonData = JSON.parse(
+      fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+    );
+
+    // Construir l'objecte de dades per a la plantilla
+    const data = {
+      common: commonData
+    };
+
+    // Renderitzar la plantilla amb les dades
+    res.render('products', {
+        ...data,
+        currentPage: 'Productos',
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error consultant la base de dades');
+  }
+});
+
 // Start server
 const httpServer = app.listen(port, () => {
   console.log(`http://localhost:${port}`);
