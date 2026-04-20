@@ -261,7 +261,7 @@ body:has(#tab1detail:checked) .kpi-content-detail {
 }
 
 .kpi-stats-detail {
-    display: flex;
+    display: none;
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: center;
@@ -270,6 +270,14 @@ body:has(#tab1detail:checked) .kpi-content-detail {
     gap: 5%;
     height: 90%;
     width: 100%;
+    opacity: 0;
+}
+
+body:has(#dot1:checked) #kpi-detail1,
+body:has(#dot2:checked) #kpi-detail2,
+body:has(#dot3:checked) #kpi-detail3 {
+    display: flex;
+    animation: fadeIn 0.4s ease-in forwards;
 }
 
 .kpi-detail-dots {
