@@ -124,6 +124,12 @@ app.get('/', async (req, res) => {
     const pastMonthBilling = await db.query('SELECT COALESCE(SUM(total), 0) AS facturacion_mes_pasado FROM sales WHERE YEAR(sale_date) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(sale_date) = MONTH(CURDATE() - INTERVAL 1 MONTH)');
     const pastMonthAvgTicket = await db.query('SELECT COALESCE((SELECT ROUND(AVG(total),2) FROM sales WHERE YEAR(sale_date)=YEAR(CURDATE()-INTERVAL 1 MONTH) AND MONTH(sale_date)=MONTH(CURDATE()-INTERVAL 1 MONTH)),0) AS promedio_gastado_mes_pasado');
 
+    const lastSales = await db.query('SELECT DATE(s.sale_date) AS sale_date, c.name AS customer_name, ROUND(s.total,2) AS total FROM sales s LEFT JOIN customers c ON s.customer_id = c.id ORDER BY s.sale_date DESC LIMIT 5');
+    const lastSalesJson = db.table_to_json(lastSales, { sale_date: 'date', customer_name: 'string', total: 'number' });
+
+    const mostSoldProducts = await db.query('SELECT p.name AS name, p.category AS category, p.stock AS stock, SUM(si.qty) AS units_sold FROM sale_items si JOIN products p ON si.product_id = p.id GROUP BY p.id, p.name, p.category, p.stock ORDER BY units_sold DESC LIMIT 5');
+    const mostSoldProductsJson = db.table_to_json(mostSoldProducts, { name: 'string', category: 'string', stock: 'number', units_sold: 'number' });
+
     // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
     const commonData = JSON.parse(
       fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
@@ -132,6 +138,8 @@ app.get('/', async (req, res) => {
     // Construir l'objecte de dades per a la plantilla
     const data = {
       common: commonData,
+      last_sales: lastSalesJson,
+      most_sold_products: mostSoldProductsJson,
       today_sales: todaySales[0].ventas_hoy,
       today_billing: todayBilling[0].facturacion_hoy,
       today_avg_ticket: todayAvgTicket[0].promedio_gastado_hoy,

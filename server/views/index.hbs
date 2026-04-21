@@ -264,21 +264,13 @@
                                 <th style="text-align: left;">Total</th>
                             </tr>
                         </thead>
-                        <tr>
-                            <td>1</td>
-                            <td>Mesa Estudio</td>
-                            <td>Muebles</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Ordenador Sobremesa</td>
-                            <td>Electrodoméstico</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Escultura Piedra</td>
-                            <td>Decoración</td>
-                        </tr>
+                        {{#each last_sales}}
+                            <tr>
+                                <td>{{sale_date}}</td>
+                                <td>{{customer_name}}</td>
+                                <td>€ {{total}}</td>
+                            </tr>
+                        {{/each}}
                     </table>
                 </div>
                 <div class="listado-table-div">
@@ -286,26 +278,25 @@
                     <table class="kpi-stock-table">
                         <thead>
                             <tr>
-                                <th style="text-align: left;">Fecha</th>
-                                <th style="text-align: left;">Cliente</th>
-                                <th style="text-align: left;">Total</th>
+                                <th style="text-align: left;">Producto</th>
+                                <th style="text-align: left;">Categoría</th>
+                                <th style="text-align: center;">Stock</th>
+                                <th style="text-align: center;">Unidades</th>
                             </tr>
                         </thead>
-                        <tr>
-                            <td>1</td>
-                            <td>Mesa Estudio</td>
-                            <td>Muebles</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Ordenador Sobremesa</td>
-                            <td>Electrodoméstico</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Escultura Piedra</td>
-                            <td>Decoración</td>
-                        </tr>
+                        {{#each most_sold_products}}
+                            <tr>
+                                <td>{{name}}</td>
+                                <td>{{category}}</td>
+                                <td class="centered-cell
+                                    {{#if (gt stock 25)}}ok-stock
+                                    {{else if (gt stock 10)}}low-stock
+                                    {{else}}critic-stock{{/if}}">
+                                    {{stock}}
+                                </td>
+                                <td class="centered-cell">{{units_sold}}</td>
+                            </tr>
+                        {{/each}}
                     </table>
                 </div>
             </div>
