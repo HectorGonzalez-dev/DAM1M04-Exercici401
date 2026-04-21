@@ -1,5 +1,8 @@
 <main>
     <h1 class="page-title">Productos</h1>
+    <div class="search-bar-div">
+
+    </div>
     <div class="container big-table-div">
         <table class="big-table">
 
@@ -32,9 +35,9 @@
     </div>
     <div class="page-nav-container">
         <div class="page-nav">
-            <a href="" class="page-arrow">&lt;</a>
-            <p class="page-number">Página X</p>
-            <a href="" class="page-arrow">&gt;</a>
+            <a {{#unless (eq page_num 1)}}href="/products?page={{prev_page}}"{{/unless}} class="page-arrow {{#if (eq page_num 1)}}inactive-arrow{{/if}}">&lt;</a>
+            <p class="page-number">Página {{page_num}}</p>
+            <a {{#unless (eq page_num total_pages)}}href="/products?page={{next_page}}"{{/unless}} class="page-arrow {{#if (eq page_num total_pages)}}inactive-arrow{{/if}}">&gt;</a>
         </div>
     </div>
 </main>

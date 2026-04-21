@@ -185,6 +185,8 @@ app.get('/products', async (req, res) => {
     const id_inicio = (pageNum - 1) * 10 + 1
     const id_final = pageNum * 10
 
+    const totalProducts = await db.query('SELECT COUNT(*) AS total FROM products');
+    const totalPages = Math.ceil(Number(totalProducts[0].total) / 10);
     const pageProducts = await db.query(`
       SELECT name, category, price, stock, active
       FROM products
@@ -201,7 +203,11 @@ app.get('/products', async (req, res) => {
     // Construir l'objecte de dades per a la plantilla
     const data = {
       common: commonData,
-      page_products: pageProductsJson
+      page_products: pageProductsJson,
+      page_num: pageNum,
+      prev_page: pageNum - 1,
+      next_page: pageNum + 1,
+      total_pages: totalPages
     };
 
     // Renderitzar la plantilla amb les dades

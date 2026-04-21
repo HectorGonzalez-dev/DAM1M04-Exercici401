@@ -567,6 +567,8 @@ footer span {
 
 .big-table {
     border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
 }
 
 .big-table thead {
@@ -631,9 +633,15 @@ footer span {
     align-content: center;
     font-size: 30px;
     text-decoration: none;
+    user-select: none;
     text-align: center;
     height: 100%;
     width: 20%;
+}
+
+.inactive-arrow {
+    background-color: rgb(229, 229, 230);
+    cursor: not-allowed;
 }
 
 .page-number {
@@ -645,4 +653,8 @@ footer span {
     margin: 0;
     height: 100%;
     width: 60%;
+}
+
+.search-bar-div {
+    
 }
