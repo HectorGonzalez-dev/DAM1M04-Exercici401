@@ -130,6 +130,9 @@ app.get('/', async (req, res) => {
     const mostSoldProducts = await db.query('SELECT p.name AS name, p.category AS category, p.stock AS stock, SUM(si.qty) AS units_sold FROM sale_items si JOIN products p ON si.product_id = p.id GROUP BY p.id, p.name, p.category, p.stock ORDER BY units_sold DESC LIMIT 5');
     const mostSoldProductsJson = db.table_to_json(mostSoldProducts, { name: 'string', category: 'string', stock: 'number', units_sold: 'number' });
 
+    const lowestStock = await db.query('SELECT id, name, category, price, stock FROM products ORDER BY stock ASC LIMIT 5');
+    const lowestStockJson = db.table_to_json(lowestStock, { id: 'number', name: 'string', category: 'string', price: 'number', stock: 'number'});
+
     // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
     const commonData = JSON.parse(
       fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
@@ -140,6 +143,7 @@ app.get('/', async (req, res) => {
       common: commonData,
       last_sales: lastSalesJson,
       most_sold_products: mostSoldProductsJson,
+      lowest_stock: lowestStockJson,
       today_sales: todaySales[0].ventas_hoy,
       today_billing: todayBilling[0].facturacion_hoy,
       today_avg_ticket: todayAvgTicket[0].promedio_gastado_hoy,

@@ -200,30 +200,21 @@
                                     <th style="text-align: center;">Activo</th>
                                 </tr>
                             </thead>
-                            <tr>
-                                <td>1</td>
-                                <td>Mesa Estudio</td>
-                                <td>Muebles</td>
-                                <td class="centered-cell">10 €</td>
-                                <td class="centered-cell low-stock">10 €</td>
-                                <td class="centered-cell">Activo</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Ordenador Sobremesa</td>
-                                <td>Electrodoméstico</td>
-                                <td class="centered-cell">10 €</td>
-                                <td class="centered-cell critic-stock">2</td>
-                                <td class="centered-cell">Activo</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Escultura Piedra</td>
-                                <td>Decoración</td>
-                                <td class="centered-cell">10 €</td>
-                                <td class="centered-cell ok-stock">4</td>
-                                <td class="centered-cell">Activo</td>
-                            </tr>
+                            {{#each lowest_stock}}
+                                <tr>
+                                    <td>{{id}}</td>
+                                    <td>{{name}}</td>
+                                    <td>{{category}}</td>
+                                    <td>{{price}}</td>
+                                    <td class="centered-cell
+                                        {{#if (gt stock 25)}}ok-stock
+                                        {{else if (gt stock 10)}}low-stock
+                                        {{else}}critic-stock{{/if}}">
+                                        {{stock}}
+                                    </td>
+                                    <td class="centered-cell"></td>
+                                </tr>
+                            {{/each}}
                         </table>
                     </div>
                 </div>
