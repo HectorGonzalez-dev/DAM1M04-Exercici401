@@ -393,9 +393,14 @@ body:has(#dot3:checked) #kpi-detail3 {
 
 .kpi-block-value-detail {
     align-content: center;
-    font-size: 50px;
+    font-size: 35px;
     height: 70%;
     margin: 0;
+}
+
+.kpi-bloc-value-detail-product {
+    font-size: 20px;
+    line-height: 1;
 }
 
 .kpi-detail-dots input[type="radio"] {

@@ -18,7 +18,7 @@ if (!isProxmox) {
     port: 3306,
     user: 'root',
     password: 'alumnat',
-    database: 'sakila'
+    database: 'tienda'
   });
 } else {
   db.init({
@@ -26,7 +26,7 @@ if (!isProxmox) {
     port: 3306,
     user: 'super',
     password: '1234',
-    database: 'sakila'
+    database: 'tienda'
   });
 }
 
@@ -58,6 +58,72 @@ hbs.registerPartials(path.join(__dirname, 'views', 'partials'));
 // Route
 app.get('/', async (req, res) => {
   try {
+    const todaySales = await db.query('SELECT COUNT(*) AS ventas_hoy FROM sales WHERE DATE(sale_date) = CURDATE()');
+    const todayBilling = await db.query('SELECT COALESCE(SUM(total), 0) AS facturacion_hoy FROM sales WHERE DATE(sale_date) = CURDATE()');
+    const todayAvgTicket = await db.query('SELECT COALESCE((SELECT ROUND(AVG(total),2) FROM sales WHERE DATE(sale_date)=CURDATE()),0) AS promedio_gastado_hoy');
+    const todayBestProduct = await db.query(`
+      SELECT COALESCE((
+        SELECT p.name AS name
+        FROM sale_items si
+        JOIN sales s ON si.sale_id = s.id
+        JOIN products p ON si.product_id = p.id
+        WHERE DATE(s.sale_date) = CURDATE()
+        GROUP BY p.id, p.name
+        ORDER BY SUM(si.qty) DESC
+        LIMIT 1
+      ), '-') AS product
+  `);
+    const todayBestCategory = await db.query(`
+      SELECT COALESCE(
+          (
+              SELECT p.category
+              FROM sales s
+              JOIN sale_items si ON si.sale_id = s.id
+              JOIN products p ON p.id = si.product_id
+              WHERE DATE(s.sale_date) = CURDATE()
+              GROUP BY p.category
+              ORDER BY SUM(si.qty) DESC
+              LIMIT 1
+          ),
+          '-'
+      ) AS top_category
+  `);
+    const yesterdaySales = await db.query('SELECT COUNT(*) AS ventas_ayer FROM sales WHERE DATE(sale_date) = CURDATE() - INTERVAL 1 DAY');
+    const yesterdayBilling = await db.query('SELECT COALESCE(SUM(total), 0) AS facturacion_ayer FROM sales WHERE DATE(sale_date) = CURDATE() - INTERVAL 1 DAY');
+    const yesterdayAvgTicket = await db.query('SELECT COALESCE((SELECT ROUND(AVG(total),2) FROM sales WHERE DATE(sale_date)=CURDATE()-INTERVAL 1 DAY),0) AS promedio_gastado_ayer');
+    const monthSales = await db.query('SELECT COUNT(*) AS ventas_mes FROM sales WHERE YEAR(sale_date) = YEAR(CURDATE()) AND MONTH(sale_date) = MONTH(CURDATE())');
+    const monthBilling = await db.query('SELECT COALESCE(SUM(total), 0) AS facturacion_mes FROM sales WHERE YEAR(sale_date) = YEAR(CURDATE()) AND MONTH(sale_date) = MONTH(CURDATE())');
+    const monthAvgTicket = await db.query('SELECT COALESCE((SELECT ROUND(AVG(total),2) FROM sales WHERE YEAR(sale_date)=YEAR(CURDATE()) AND MONTH(sale_date)=MONTH(CURDATE())),0) AS promedio_gastado_mes');
+    const monthBestProduct = await db.query(`
+      SELECT COALESCE((
+        SELECT p.name AS name
+        FROM sale_items si
+        JOIN sales s ON si.sale_id = s.id
+        JOIN products p ON si.product_id = p.id
+        WHERE YEAR(s.sale_date) = YEAR(CURDATE())
+          AND MONTH(s.sale_date) = MONTH(CURDATE())
+        GROUP BY p.id, p.name
+        ORDER BY SUM(si.qty) DESC
+        LIMIT 1
+      ), '-') AS product
+  `);
+    const monthBestCategory = await db.query(`
+      SELECT COALESCE((
+        SELECT p.category
+        FROM sale_items si
+        JOIN sales s ON si.sale_id = s.id
+        JOIN products p ON si.product_id = p.id
+        WHERE YEAR(s.sale_date) = YEAR(CURDATE())
+          AND MONTH(s.sale_date) = MONTH(CURDATE())
+        GROUP BY p.category
+        ORDER BY SUM(si.qty) DESC
+        LIMIT 1
+      ), '-') AS category
+  `);
+    const pastMonthSales = await db.query('SELECT COUNT(*) AS ventas_mes FROM sales WHERE YEAR(sale_date) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(sale_date) = MONTH(CURDATE() - INTERVAL 1 MONTH)');
+    const pastMonthBilling = await db.query('SELECT COALESCE(SUM(total), 0) AS facturacion_mes_pasado FROM sales WHERE YEAR(sale_date) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(sale_date) = MONTH(CURDATE() - INTERVAL 1 MONTH)');
+    const pastMonthAvgTicket = await db.query('SELECT COALESCE((SELECT ROUND(AVG(total),2) FROM sales WHERE YEAR(sale_date)=YEAR(CURDATE()-INTERVAL 1 MONTH) AND MONTH(sale_date)=MONTH(CURDATE()-INTERVAL 1 MONTH)),0) AS promedio_gastado_mes_pasado');
+
     // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
     const commonData = JSON.parse(
       fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
@@ -65,7 +131,23 @@ app.get('/', async (req, res) => {
 
     // Construir l'objecte de dades per a la plantilla
     const data = {
-      common: commonData
+      common: commonData,
+      today_sales: todaySales[0].ventas_hoy,
+      today_billing: todayBilling[0].facturacion_hoy,
+      today_avg_ticket: todayAvgTicket[0].promedio_gastado_hoy,
+      today_best_product: todayBestProduct[0].product,
+      today_best_category: todayBestCategory[0].top_category,
+      yesterday_billing: yesterdayBilling[0].facturacion_ayer,
+      yesterday_sales: yesterdaySales[0].ventas_ayer,
+      yesterday_avg_ticket: yesterdayAvgTicket[0].promedio_gastado_ayer,
+      month_sales: monthSales[0].ventas_mes,
+      month_billing: monthBilling[0].facturacion_mes,
+      month_avg_ticket: monthAvgTicket[0].promedio_gastado_mes,
+      month_best_product: monthBestProduct[0].product,
+      month_best_category: monthBestCategory[0].category,
+      past_month_sales: pastMonthSales[0].ventas_mes,
+      past_month_billing: pastMonthBilling[0].facturacion_mes_pasado,
+      past_month_avg_ticket: pastMonthAvgTicket[0].promedio_gastado_mes_pasado
     };
 
     // Renderitzar la plantilla amb les dades

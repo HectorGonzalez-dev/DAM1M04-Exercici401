@@ -42,19 +42,19 @@
                 <div class="kpi-stats">
                     <div class="kpi-block">
                         <h3 class="kpi-block-title">Ventas de hoy</h3>
-                        <p class="kpi-block-value">7</p>
+                        <p class="kpi-block-value">{{today_sales}}</p>
                     </div>
                     <div class="kpi-block">
                         <h3 class="kpi-block-title">Ventas del mes</h3>
-                        <p class="kpi-block-value">13</p>
+                        <p class="kpi-block-value">{{month_sales}}</p>
                     </div>
                     <div class="kpi-block">
                         <h3 class="kpi-block-title">Pedidos de hoy</h3>
-                        <p class="kpi-block-value">29</p>
+                        <p class="kpi-block-value">{{today_sales}}</p>
                     </div>
                     <div class="kpi-block">
                         <h3 class="kpi-block-title">Pedidos del mes</h3>
-                        <p class="kpi-block-value">144</p>
+                        <p class="kpi-block-value">{{month_sales}}</p>
                     </div>
                 </div>
                 <div class="kpi-stock">
@@ -95,44 +95,44 @@
                     <div class="kpi-block-detail">
                         <div class="kpi-block-detail-section">
                             <h3 class="kpi-block-title-detail">Facturado hoy</h3>
-                            <p class="kpi-block-value-detail">144</p>
+                            <p class="kpi-block-value-detail">€ {{today_billing}}</p>
                         </div>
                         <div class="kpi-block-detail-section">
                             <h3 class="kpi-block-title-detail">Facturado ayer</h3>
-                            <p class="kpi-block-value-detail">144</p>
+                            <p class="kpi-block-value-detail">€ {{yesterday_billing}}</p>
                         </div>
                         <div class="kpi-block-detail-section"></div>
                     </div>
                     <div class="kpi-block-detail">
                         <div class="kpi-block-detail-section">
                             <h3 class="kpi-block-title-detail">Ventas hoy</h3>
-                            <p class="kpi-block-value-detail">144</p>
+                            <p class="kpi-block-value-detail">{{today_sales}}</p>
                         </div>
                         <div class="kpi-block-detail-section">
                             <h3 class="kpi-block-title-detail">Ventas ayer</h3>
-                            <p class="kpi-block-value-detail">144</p>
+                            <p class="kpi-block-value-detail">{{yesterday_sales}}</p>
                         </div>
                         <div class="kpi-block-detail-section"></div>
                     </div>
                     <div class="kpi-block-detail">
                         <div class="kpi-block-detail-section">
                             <h3 class="kpi-block-title-detail">Ticket medio hoy</h3>
-                            <p class="kpi-block-value-detail">144</p>
+                            <p class="kpi-block-value-detail">€ {{today_avg_ticket}}</p>
                         </div>
                         <div class="kpi-block-detail-section">
                             <h3 class="kpi-block-title-detail">Ticket medio ayer</h3>
-                            <p class="kpi-block-value-detail">144</p>
+                            <p class="kpi-block-value-detail">€ {{yesterday_avg_ticket}}</p>
                         </div>
                         <div class="kpi-block-detail-section"></div>
                     </div>
                     <div class="kpi-block-detail">
                         <div class="kpi-block-detail-section">
                             <h3 class="kpi-block-title-detail">Producto más vendido hoy</h3>
-                            <p class="kpi-block-value-detail">144</p>
+                            <p class="kpi-block-value-detail kpi-bloc-value-detail-product">{{today_best_product}}</p>
                         </div>
                         <div class="kpi-block-detail-section">
                             <h3 class="kpi-block-title-detail">Categoría más vendida hoy</h3>
-                            <p class="kpi-block-value-detail">144</p>
+                            <p class="kpi-block-value-detail kpi-bloc-value-detail-product">{{today_best_category}}</p>
                         </div>
                         <div class="kpi-block-detail-section"></div>
                     </div>
@@ -142,44 +142,44 @@
                     <div class="kpi-block-detail">
                         <div class="kpi-block-detail-section">
                             <h3 class="kpi-block-title-detail">Facturado este mes</h3>
-                            <p class="kpi-block-value-detail">144</p>
+                            <p class="kpi-block-value-detail">€ {{month_billing}}</p>
                         </div>
                         <div class="kpi-block-detail-section">
                             <h3 class="kpi-block-title-detail">Facturado el mes pasado</h3>
-                            <p class="kpi-block-value-detail">144</p>
+                            <p class="kpi-block-value-detail">€ {{past_month_billing}}</p>
                         </div>
                         <div class="kpi-block-detail-section"></div>
                     </div>
                     <div class="kpi-block-detail">
                         <div class="kpi-block-detail-section">
                             <h3 class="kpi-block-title-detail">Ventas del mes</h3>
-                            <p class="kpi-block-value-detail">144</p>
+                            <p class="kpi-block-value-detail">{{month_sales}}</p>
                         </div>
                         <div class="kpi-block-detail-section">
                             <h3 class="kpi-block-title-detail">Ventas del mes pasado</h3>
-                            <p class="kpi-block-value-detail">144</p>
+                            <p class="kpi-block-value-detail">{{past_month_sales}}</p>
                         </div>
                         <div class="kpi-block-detail-section"></div>
                     </div>
                     <div class="kpi-block-detail">
                         <div class="kpi-block-detail-section">
                             <h3 class="kpi-block-title-detail">Ticket medio este mes</h3>
-                            <p class="kpi-block-value-detail">144</p>
+                            <p class="kpi-block-value-detail">€ {{month_avg_ticket}}</p>
                         </div>
                         <div class="kpi-block-detail-section">
                             <h3 class="kpi-block-title-detail">Ticket medio el mes pasado</h3>
-                            <p class="kpi-block-value-detail">144</p>
+                            <p class="kpi-block-value-detail">€ {{past_month_avg_ticket}}</p>
                         </div>
                         <div class="kpi-block-detail-section"></div>
                     </div>
                     <div class="kpi-block-detail">
                         <div class="kpi-block-detail-section">
                             <h3 class="kpi-block-title-detail">Producto más vendido este mes</h3>
-                            <p class="kpi-block-value-detail">144</p>
+                            <p class="kpi-block-value-detail kpi-bloc-value-detail-product">{{month_best_product}}</p>
                         </div>
                         <div class="kpi-block-detail-section">
                             <h3 class="kpi-block-title-detail">Categoría más vendida este mes</h3>
-                            <p class="kpi-block-value-detail">144</p>
+                            <p class="kpi-block-value-detail kpi-bloc-value-detail-product">{{month_best_category}}</p>
                         </div>
                         <div class="kpi-block-detail-section"></div>
                     </div>
