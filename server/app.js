@@ -175,6 +175,24 @@ app.get('/', async (req, res) => {
 
 app.get('/products', async (req, res) => {
   try {
+
+    const pageNum = parseInt(req.query.page, 10)
+
+    if (!Number.isInteger(pageNum) || pageNum <= 0) {
+      return res.status(400).send('Paràmetre id invàlid')
+    }
+
+    const id_inicio = (pageNum - 1) * 10 + 1
+    const id_final = pageNum * 10
+
+    const pageProducts = await db.query(`
+      SELECT name, category, price, stock, active
+      FROM products
+      WHERE id BETWEEN ${id_inicio} AND ${id_final}
+      ORDER BY id
+    `);
+    const pageProductsJson = db.table_to_json(pageProducts, { name: 'string', category: 'string', price: 'number', stock: 'number', active: 'number' });
+
     // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
     const commonData = JSON.parse(
       fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
@@ -182,7 +200,8 @@ app.get('/products', async (req, res) => {
 
     // Construir l'objecte de dades per a la plantilla
     const data = {
-      common: commonData
+      common: commonData,
+      page_products: pageProductsJson
     };
 
     // Renderitzar la plantilla amb les dades
