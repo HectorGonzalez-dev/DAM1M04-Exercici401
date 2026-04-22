@@ -812,6 +812,77 @@ app.get('/sales', async (req, res) => {
   }
 });
 
+app.get('/saleView', async (req, res) => {
+  try {
+    const saleId = parseInt(req.query.id, 10);
+    if (!Number.isInteger(saleId) || saleId <= 0) {
+      return res.status(400).send('ID de venta inválido');
+    }
+
+    // Obtener datos principales de la venta
+    const saleRows = await db.query(`
+      SELECT 
+        s.id,
+        s.sale_date AS date,
+        s.payment_method,
+        s.total,
+        c.name AS client
+      FROM sales s
+      LEFT JOIN customers c ON s.customer_id = c.id
+      WHERE s.id = ${saleId}
+    `);
+
+    if (!saleRows.length) {
+      return res.status(404).send('Venta no encontrada');
+    }
+
+    const sale = {
+      id: saleRows[0].id,
+      date: saleRows[0].date
+        ? saleRows[0].date.toISOString().slice(0, 19).replace('T', ' ')
+        : '',
+      payment_method: saleRows[0].payment_method,
+      total: Number(saleRows[0].total).toFixed(2),
+      client: saleRows[0].client
+    };
+
+    // Obtener artículos de la venta
+    const itemsRows = await db.query(`
+      SELECT 
+        p.name AS product,
+        si.qty AS quantity,
+        si.unit_price,
+        ROUND(si.qty * si.unit_price, 2) AS total
+      FROM sale_items si
+      INNER JOIN products p ON si.product_id = p.id
+      WHERE si.sale_id = ${saleId};
+    `);
+
+    const sale_items = itemsRows.map(row => ({
+      product: row.product,
+      quantity: row.quantity,
+      unit_price: Number(row.unit_price).toFixed(2),
+      total: Number(row.total).toFixed(2)
+    }));
+
+    // Leer datos comunes
+    const commonData = JSON.parse(
+      fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+    );
+
+    res.render('saleView', {
+      common: commonData,
+      sale,
+      sale_items,
+      currentPage: 'Detalle Venta',
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error consultando la base de datos');
+  }
+});
+
 // Start server
 const httpServer = app.listen(port, () => {
   console.log(`http://localhost:${port}`);

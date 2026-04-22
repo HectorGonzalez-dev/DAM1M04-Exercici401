@@ -1,0 +1,56 @@
+<main class="container">
+
+    <h2 class="page-title">Detalle de la Venta</h2>
+
+    <section class="big-table-div" style="padding: 30px; margin-bottom: 30px;">
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div><strong>ID Venta:</strong> {{sale.id}}</div>
+            <div><strong>Cliente:</strong> {{sale.client}}</div>
+            <div><strong>Fecha:</strong> {{sale.date}}</div>
+            <div><strong>Método de Pago:</strong> {{sale.payment_method}}</div>
+        </div>
+
+    </section>
+
+    <h3 class="kpi-stock-title">Artículos de la Venta</h3>
+
+    <div class="big-table-div">
+
+        <table class="big-table">
+            <thead>
+                <tr>
+                    <th style="text-align: left;">Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each sale_items}}
+                <tr>
+                    <td>{{this.product}}</td>
+                    <td class="centered-cell">{{this.quantity}}</td>
+                    <td class="centered-cell">€ {{this.unit_price}}</td>
+                    <td class="centered-cell">€ {{this.total}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+    </div>
+
+    <section class="listado-content" style="height: auto; margin-top: 30px;">
+
+        <div class="kpi-block" style="width: 300px;">
+            <p class="kpi-block-title">Total Venta</p>
+            <p class="kpi-block-value" style="font-size: 40px;">€ {{sale.total}}</p>
+        </div>
+
+    </section>
+
+    <div class="page-nav-container return-button">
+        <a class="main-btn add-btn" href="/sales?page=1">Volver</a>
+    </div>
+
+</main>
