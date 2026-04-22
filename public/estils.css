@@ -198,7 +198,7 @@ svg {
 /* Active tab styling */
 body:has(#tab1:checked) .side-bar .tabButton1,
 body:has(#tab2:checked) .side-bar .tabButton2 {
-    background-color: #008397;
+    background-color: var(--accent);
 }
 
 body:has(#tab1:checked) .content-1,
@@ -499,7 +499,6 @@ body:has(#dot3:checked) #kpi-detail3 {
 
 .kpi-stock-table thead {
     position: sticky;
-    box-shadow: 0 5px 10px #ffffff;
 }
 
 .kpi-stock-table th, .kpi-stock-table td {
@@ -605,7 +604,6 @@ footer span {
 
 .big-table thead {
     position: sticky;
-    box-shadow: 0 5px 10px #ffffff;
 }
 
 .big-table th, .big-table td {
@@ -648,7 +646,7 @@ footer span {
 .page-nav {
     display: flex;
     flex-direction: row;
-    background-color: rgb(245 247 249);
+    background-color: var(--primary);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     height: 80%;
     width: 20%;
@@ -658,7 +656,7 @@ footer span {
 
 .page-arrow {
     display: flex;
-    background-color: rgb(245 247 249);
+    background-color: var(--primary);
     color: #363537;
     flex-wrap: wrap;
     justify-content: center;
@@ -672,7 +670,7 @@ footer span {
 }
 
 .inactive-arrow {
-    background-color: rgb(229, 229, 230);
+    background-color: var(--primary-hover);
     cursor: not-allowed;
 }
 

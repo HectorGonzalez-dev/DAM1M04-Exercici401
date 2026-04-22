@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "--surface-2": "#ffffff",
             "--primary": "#0C9DB4",
             "--primary-hover": "#0a879b",
-            "--accent": "#1AAE5E",
+            "--accent": "#076877",
             "--border": "#dcdcdc"
         },
 
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "--surface-2": "#23252c",
             "--primary": "#7aa2f7",
             "--primary-hover": "#5f8df0",
-            "--accent": "#7aa2f7",
+            "--accent": "#537cd4",
             "--border": "#3a3d46"
         },
 
@@ -103,9 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
             "--text": "#ffffff",
             "--surface": "#000000",
             "--surface-2": "#0a0a0a",
-            "--primary": "#ffff00",
-            "--primary-hover": "#e6e600",
-            "--accent": "#ffff00",
+            "--primary": "#cc871f",
+            "--primary-hover": "#c7821a",
+            "--accent": "#b87614",
             "--border": "#ffffff"
         }
     };
