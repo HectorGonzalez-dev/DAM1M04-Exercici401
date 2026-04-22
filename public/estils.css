@@ -704,6 +704,7 @@ footer span {
     width: 100%;
     max-width: 600px;
     margin: 40px auto;
+    margin-top: 0;
     padding: 30px;
     background-color: rgb(245 247 249);
     border-radius: 20px;
@@ -796,4 +797,13 @@ footer span {
     justify-content: center;
     text-decoration: none;
     width: 200px;
+}
+
+.edit-link {
+    text-decoration: none;
+    color: #0a879b;
+}
+
+.edit-link:hover {
+    color: #0C9DB4;
 }

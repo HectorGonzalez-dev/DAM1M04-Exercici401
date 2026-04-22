@@ -175,7 +175,6 @@ app.get('/', async (req, res) => {
 
 app.get('/products', async (req, res) => {
   try {
-
     const pageNum = parseInt(req.query.page, 10)
     const searchString = req.query.search || "";
 
@@ -191,7 +190,7 @@ app.get('/products', async (req, res) => {
         // Sin búsqueda
         totalProducts = await db.query('SELECT COUNT(*) AS total FROM products');
         pageProducts = await db.query(`
-          SELECT name, category, price, stock, active
+          SELECT id, name, category, price, stock, active
           FROM products
           ORDER BY id
           LIMIT 10 OFFSET ${offset}
@@ -204,7 +203,7 @@ app.get('/products', async (req, res) => {
             OR LOWER(category) LIKE LOWER('%${searchString}%')
         `);
         pageProducts = await db.query(`
-          SELECT name, category, price, stock, active
+          SELECT id, name, category, price, stock, active
           FROM products
           WHERE LOWER(name) LIKE LOWER('%${searchString}%')
             OR LOWER(category) LIKE LOWER('%${searchString}%')
@@ -213,7 +212,7 @@ app.get('/products', async (req, res) => {
     }
     const totalPages = Math.ceil(Number(totalProducts[0].total) / 10);
 
-    const pageProductsJson = db.table_to_json(pageProducts, { name: 'string', category: 'string', price: 'number', stock: 'number', active: 'number' });
+    const pageProductsJson = db.table_to_json(pageProducts, { id: 'number', name: 'string', category: 'string', price: 'number', stock: 'number', active: 'number' });
 
     // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
     const commonData = JSON.parse(
@@ -289,6 +288,84 @@ app.post('/createProduct', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send('Error al crear el producto');
+  }
+});
+
+// Mostrar formulario para agregar producto
+app.get('/productEdit', async (req, res) => {
+  try {
+    const prodID = parseInt(req.query.id, 10)
+
+    if (!Number.isInteger(prodID) || prodID <= 0) {
+      return res.status(400).send('Paràmetre id invàlid')
+    }
+
+    const prodInfo = await db.query(`SELECT name, category, price, stock, active FROM products WHERE id=${prodID}`);
+    const prodInfoJson = db.table_to_json(prodInfo, { name: 'string', category: 'string', price: 'number', stock: 'number', active: 'number' });
+
+    // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
+    const commonData = JSON.parse(
+      fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+    );
+
+    // Construir l'objecte de dades per a la plantilla
+    const data = {
+      common: commonData,
+      prod_info: prodInfoJson[0],
+      prod_id: prodID
+    };
+
+    // Renderitzar la plantilla amb les dades
+    res.render('productEdit', {
+        ...data,
+        currentPage: 'Editar producto',
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error consultant la base de dades');
+  }
+});
+
+// Editar producto
+app.post('/editProduct', async (req, res) => {
+  try {
+    const id = parseInt(req.body.id, 10)
+    const name = req.body.name
+    const category = req.body.category
+    const price = parseFloat(req.body.price)
+    const stock = parseInt(req.body.stock, 10)
+    const active = parseInt(req.body.active, 10)
+    // Validación básica en backend
+    const errors = {};
+    if (!name || !name.trim()) errors.name = 'El nombre es obligatorio';
+    if (!category || !category.trim()) errors.category = 'La categoría es obligatoria';
+    if (isNaN(price) || price <= 0) errors.price = 'El precio debe ser mayor que 0';
+    if (isNaN(stock) || stock < 0 || !Number.isInteger(stock)) errors.stock = 'El stock debe ser un número entero mayor o igual a 0';
+    if (active !== 1 && active !== 0) errors.active = 'Seleccione si el producto está activo';
+
+    if (Object.keys(errors).length > 0) {
+      // Si hay errores, volver al formulario con errores
+      const commonData = JSON.parse(
+        fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+      );
+      return res.status(400).render('productEdit', {
+        common: commonData,
+        currentPage: 'Editar producto',
+        errors,
+        form: { name, category, price, stock, active }
+      });
+    }
+
+    // Insertar en la base de datos
+    await db.query(`
+      UPDATE products
+      SET name = "${name}", category = "${category}", price = ${price}, stock = ${stock}, active = ${active}
+      WHERE id = ${id}
+    `)
+    res.redirect('/products?page=1');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error al editar el producto');
   }
 });
 

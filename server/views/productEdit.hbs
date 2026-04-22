@@ -1,0 +1,47 @@
+<main>
+    <h1 class="page-title">Agregar nuevo producto</h1>
+    <form id="addProductForm" action="/editProduct" method="POST" novalidate>
+        <input type="hidden" name="id" value="{{prod_id}}">
+        <div class="form-group">
+            <label for="productName">Nombre del producto *</label>
+            <input type="text" id="productName" name="name" required value="{{prod_info.name}}">
+            <div class="error-message" id="errorName" style="color:red;">
+                {{#if errors.name}}{{errors.name}}{{/if}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="category">Categoría *</label>
+            <input type="text" id="category" name="category" required value="{{prod_info.category}}">
+            <div class="error-message" id="errorCategory" style="color:red;">
+                {{#if errors.category}}{{errors.category}}{{/if}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="price">Precio *</label>
+            <input type="number" id="price" name="price" step="0.01" min="0.01" required value="{{prod_info.price}}">
+            <div class="error-message" id="errorPrice" style="color:red;">
+                {{#if errors.price}}{{errors.price}}{{/if}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="stock">Stock *</label>
+            <input type="number" id="stock" name="stock" step="1" min="0" required value="{{prod_info.stock}}">
+            <div class="error-message" id="errorStock" style="color:red;">
+                {{#if errors.stock}}{{errors.stock}}{{/if}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="active">Activo *</label>
+            <select id="active" name="active" required>
+                <option value="1" {{#if (eq prod_info.active '1')}}selected{{/if}}>Sí</option>
+                <option value="0" {{#if (eq prod_info.active '0')}}selected{{/if}}>No</option>
+            </select>
+            <div class="error-message" id="errorActive" style="color:red;">
+                {{#if errors.active}}{{errors.active}}{{/if}}
+            </div>
+        </div>
+        <button type="submit" class="main-btn">Editar producto</button>
+        <a href="/products?page=1" class="cancel-btn">Cancelar</a>
+    </form>
+    <script src="/js/productAddValidation.js"></script>
+</main>

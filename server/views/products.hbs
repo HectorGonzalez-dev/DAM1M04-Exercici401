@@ -37,7 +37,7 @@
                         {{stock}}
                     </td>
                     <td class="centered-cell">{{#if (eq active 1)}}Activo{{else}}Inactivo{{/if}}</td>
-                    <td class="centered-cell">Editar</td>
+                    <td class="centered-cell"><a class="edit-link" href="/productEdit?id={{id}}">Editar</a></td>
                 </tr>
             {{/each}}
         </table>
