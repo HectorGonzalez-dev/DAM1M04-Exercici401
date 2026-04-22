@@ -1,0 +1,60 @@
+<main>
+    <h1 class="page-title">Ventas</h1>
+    <div style="margin-bottom: 1.5em;">
+        <div style="clear:both;"></div>
+    </div>
+
+    <form id="searchForm" action="/sales" method="GET">
+        <div class="search-bar-div">
+            <button type="submit" form="searchForm" class="search-button">🔍</button>
+            <input type="hidden" name="page" value="1">
+            <input class="search-bar" type="text" name="search" placeholder="  Buscar..."/>
+            <a class="cancel-search" href="/sales?page=1">X</a>
+        </div>
+    </form>
+
+    <div class="container big-table-div">
+        <table class="big-table">
+            <thead>
+                <tr>
+                    <th style="text-align: left;">Fecha</th>
+                    <th style="text-align: left;">Cliente</th>
+                    <th style="text-align: left;">Total</th>
+                    <th style="text-align: center;">Acciones</th>
+                </tr>
+            </thead>
+
+            {{#each page_sales}}
+                <tr>
+                    <td>{{date}}</td>
+                    <td>{{client}}</td>
+                    <td>€ {{total}}</td>
+                    <td class="centered-cell">
+                        <a class="edit-link" href="/saleView?id={{id}}">Ver</a>
+                    </td>
+                </tr>
+            {{/each}}
+
+        </table>
+    </div>
+
+    <div class="page-nav-container">
+        <div class="page-nav">
+            <a {{#unless (eq page_num 1)}}
+                href="/sales?page={{prev_page}}{{#if search_string}}&search={{search_string}}{{/if}}"
+                {{/unless}}
+                class="page-arrow {{#if (eq page_num 1)}}inactive-arrow{{/if}}">
+            &lt;
+            </a>
+
+            <p class="page-number">Página {{page_num}}</p>
+
+            <a {{#unless (eq page_num total_pages)}}
+                href="/sales?page={{next_page}}{{#if search_string}}&search={{search_string}}{{/if}}"
+                {{/unless}}
+                class="page-arrow {{#if (eq page_num total_pages)}}inactive-arrow{{/if}}">
+            &gt;
+            </a>
+        </div>
+    </div>
+</main>

@@ -727,6 +727,91 @@ app.get('/clientData', async (req, res) => {
   }
 });
 
+// -----------------------------------------------------------------
+// ventas
+// -----------------------------------------------------------------
+
+app.get('/sales', async (req, res) => {
+  try {
+    const pageNum = parseInt(req.query.page, 10);
+    const searchString = req.query.search || "";
+
+    if (!Number.isInteger(pageNum) || pageNum <= 0) {
+      return res.status(400).send('Parámetro inválido');
+    }
+
+    let pageSales;
+    let totalSales;
+    const offset = (pageNum - 1) * 10;
+
+    if (searchString.trim() === "") {
+      // Sin búsqueda
+      totalSales = await db.query('SELECT COUNT(*) AS total FROM sales');
+      pageSales = await db.query(`
+        SELECT 
+            s.id AS id,
+            s.sale_date AS date,
+            c.name AS client,
+            s.total AS total
+        FROM sales s
+        LEFT JOIN customers c ON s.customer_id = c.id
+        LIMIT 10 OFFSET ${offset}
+      `);
+    } else {
+      // Con búsqueda
+      totalSales = await db.query(`
+        SELECT COUNT(*) AS total
+        FROM sales s
+        LEFT JOIN customers c ON s.customer_id = c.id
+        WHERE LOWER(c.name) LIKE LOWER('%${searchString}%')
+      `);
+      pageSales = await db.query(`
+        SELECT 
+            s.id AS id,
+            s.sale_date AS date,
+            c.name AS client,
+            s.total
+        FROM sales s
+        LEFT JOIN customers c ON s.customer_id = c.id
+        WHERE LOWER(c.name) LIKE LOWER('%${searchString}%')
+        LIMIT 10 OFFSET ${offset}
+      `);
+    }
+
+    const totalPages = Math.ceil(Number(totalSales[0].total) / 10);
+
+    const pageSalesJson = db.table_to_json(pageSales, {
+      id: 'number',
+      date: 'date',
+      client: 'string',
+      total: 'number'
+    });
+
+    const commonData = JSON.parse(
+      fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+    );
+
+    const data = {
+      common: commonData,
+      page_sales: pageSalesJson,
+      page_num: pageNum,
+      search_string: searchString,
+      prev_page: pageNum - 1,
+      next_page: pageNum + 1,
+      total_pages: totalPages
+    };
+
+    res.render('sales', {
+      ...data,
+      currentPage: 'Ventas',
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error consultando la base de datos');
+  }
+});
+
 // Start server
 const httpServer = app.listen(port, () => {
   console.log(`http://localhost:${port}`);
