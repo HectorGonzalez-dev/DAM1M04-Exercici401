@@ -1,0 +1,63 @@
+<main class="container">
+
+    <h2 class="page-title">Datos del Cliente</h2>
+
+    <section class="big-table-div client-info" style="padding: 30px; margin-bottom: 30px;">
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div><strong>ID:</strong> {{client.id}}</div>
+            <div><strong>Nombre:</strong> {{client.name}}</div>
+            <div><strong>Email:</strong> {{client.email}}</div>
+            <div><strong>Número:</strong> {{client.number}}</div>
+        </div>
+
+    </section>
+
+    <h3 class="kpi-stock-title">Historial de Compras (Últimas 10)</h3>
+
+    <div class="big-table-div">
+
+        <table class="big-table">
+            <thead>
+                <tr>
+                    <th style="text-align: left;">Fecha</th>
+                    <th style="text-align: left;">Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each purchases}}
+                <tr>
+                    <td>{{this.date}}</td>
+                    <td>{{this.product}}</td>
+                    <td class="centered-cell">{{this.quantity}}</td>
+                    <td class="centered-cell">€ {{this.unitPrice}}</td>
+                    <td class="centered-cell">€ {{this.total}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+    </div>
+
+    <section class="listado-content" style="height: auto; margin-top: 30px;">
+
+        <div class="kpi-block" style="width: 300px;">
+            <p class="kpi-block-title">Total Gastado</p>
+            <p class="kpi-block-value" style="font-size: 40px;">€ {{totalSpent}}</p>
+        </div>
+
+        <div class="kpi-block" style="width: 300px;">
+            <p class="kpi-block-title">Gasto Medio</p>
+            <p class="kpi-block-value" style="font-size: 40px;">€ {{averageSpent}}</p>
+        </div>
+
+    </section>
+
+    <div class="page-nav-container return-button">
+        <a class="main-btn add-btn" href="/clients?page=1">Volver</a>
+    </div>
+
+</main>

@@ -660,6 +660,73 @@ app.post('/deleteClient', async (req, res) => {
   }
 })
 
+// Mostrar datos y compras de un cliente
+app.get('/clientData', async (req, res) => {
+  try {
+    const clientId = parseInt(req.query.id, 10);
+    if (!Number.isInteger(clientId) || clientId <= 0) {
+      return res.status(400).send('ID de cliente inválida');
+    }
+
+    // Obtener datos del cliente
+    const clientRows = await db.query(`SELECT id, name, email, phone AS number FROM customers WHERE id = ${clientId}`);
+    if (!clientRows.length) {
+      return res.status(404).send('Cliente no encontrado');
+    }
+    const client = clientRows[0];
+
+    // Obtener historial de compras (últimas 10)
+    const purchasesRows = await db.query(`
+      SELECT 
+        s.sale_date AS date,
+        p.name AS product,
+        si.qty AS quantity,
+        si.unit_price AS unitPrice,
+        ROUND(si.qty * si.unit_price, 2) AS total
+      FROM sales s
+      JOIN sale_items si ON s.id = si.sale_id
+      JOIN products p ON si.product_id = p.id
+      WHERE s.customer_id = ${clientId}
+      ORDER BY s.sale_date DESC
+      LIMIT 10
+    `);
+    const purchases = purchasesRows.map(row => ({
+      date: row.date ? row.date.toISOString().slice(0, 19).replace('T', ' ') : '',
+      product: row.product,
+      quantity: row.quantity,
+      unitPrice: row.unitPrice,
+      total: row.total
+    }));
+
+    // Calcular total gastado y gasto medio
+    const totalSpentRow = await db.query(`SELECT COALESCE(SUM(si.qty * si.unit_price), 0) AS totalSpent FROM sales s JOIN sale_items si ON s.id = si.sale_id WHERE s.customer_id = ${clientId}`);    
+    const totalSpent = Number(totalSpentRow[0].totalSpent ?? 0);
+    const formatted = totalSpent.toFixed(2);
+
+    const avgSpentRow = await db.query(`SELECT COALESCE(AVG(s.total), 0) AS averageSpent FROM sales s WHERE s.customer_id = ${clientId}`);
+    const averageSpent = Number(avgSpentRow[0].averageSpent ?? 0);
+    const formatted2 = averageSpent.toFixed(2);
+
+
+    // Leer datos comunes
+    const commonData = JSON.parse(
+      fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+    );
+
+    res.render('clientData', {
+      common: commonData,
+      client,
+      purchases,
+      totalSpent: formatted,
+      averageSpent: formatted2,
+      currentPage: 'Datos Cliente',
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error consultando la base de datos');
+  }
+});
+
 // Start server
 const httpServer = app.listen(port, () => {
   console.log(`http://localhost:${port}`);
