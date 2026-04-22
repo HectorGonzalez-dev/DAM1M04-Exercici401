@@ -242,6 +242,56 @@ app.get('/products', async (req, res) => {
   }
 });
 
+// Mostrar formulario para agregar producto
+app.get('/productAdd', (req, res) => {
+  // Leer datos comunes
+  const commonData = JSON.parse(
+    fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+  );
+  res.render('productAdd', {
+    common: commonData,
+    currentPage: 'Agregar producto',
+  });
+});
+
+// Crear producto
+app.post('/createProduct', async (req, res) => {
+  try {
+    const { name, category, price, stock, active } = req.body;
+    // Validación básica en backend
+    const errors = {};
+    if (!name || !name.trim()) errors.name = 'El nombre es obligatorio';
+    if (!category || !category.trim()) errors.category = 'La categoría es obligatoria';
+    const priceNum = parseFloat(price);
+    if (isNaN(priceNum) || priceNum <= 0) errors.price = 'El precio debe ser mayor que 0';
+    const stockNum = parseInt(stock);
+    if (isNaN(stockNum) || stockNum < 0 || !Number.isInteger(stockNum)) errors.stock = 'El stock debe ser un número entero mayor o igual a 0';
+    if (active !== '1' && active !== '0') errors.active = 'Seleccione si el producto está activo';
+
+    if (Object.keys(errors).length > 0) {
+      // Si hay errores, volver al formulario con errores
+      const commonData = JSON.parse(
+        fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+      );
+      return res.status(400).render('productAdd', {
+        common: commonData,
+        currentPage: 'Agregar producto',
+        errors,
+        form: { name, category, price, stock, active }
+      });
+    }
+
+    // Insertar en la base de datos
+    await db.query(
+      `INSERT INTO products (name, category, price, stock, active) VALUES ('${name.trim()}', '${category.trim()}', ${priceNum}, ${stockNum}, ${Number(active)})`
+    );
+    res.redirect('/products?page=1');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error al crear el producto');
+  }
+});
+
 // Start server
 const httpServer = app.listen(port, () => {
   console.log(`http://localhost:${port}`);

@@ -692,3 +692,108 @@ footer span {
     align-content: center;
     justify-content: center;
 }
+
+/* =========================
+   ADD PRODUCT PAGE ONLY
+   ========================= */
+
+#addProductForm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: rgb(245 247 249);
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+}
+
+/* Campos */
+#addProductForm .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#addProductForm label {
+    font-weight: 600;
+    color: #363537;
+    font-size: 14px;
+}
+
+/* Inputs y select */
+#addProductForm input,
+#addProductForm select {
+    height: 40px;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    padding: 0 12px;
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 14px;
+    outline: none;
+    background-color: #ffffff;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+#addProductForm input:focus,
+#addProductForm select:focus {
+    border-color: #0C9DB4;
+    box-shadow: 0 0 0 3px rgba(12, 157, 180, 0.15);
+}
+
+/* Errores */
+#addProductForm .error-message {
+    font-size: 12px;
+    min-height: 16px;
+    color: #c62828;
+}
+
+/* Botón principal */
+.main-btn {
+    height: 45px;
+    border: none;
+    border-radius: 12px;
+    background-color: #0C9DB4;
+    color: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+#addProductForm .main-btn:hover {
+    background-color: #0a879b;
+}
+
+#addProductForm .main-btn:active {
+    transform: scale(0.98);
+}
+
+/* Cancelar */
+#addProductForm .cancel-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    border-radius: 12px;
+    background-color: rgb(229, 229, 230);
+    color: #363537;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+#addProductForm .cancel-btn:hover {
+    background-color: rgb(211, 211, 212);
+}
+
+.add-btn {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    text-decoration: none;
+    width: 200px;
+}
