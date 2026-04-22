@@ -1,0 +1,29 @@
+<main>
+    <h1 class="page-title">Agregar nuevo cliente</h1>
+    <form id="addProductForm" action="/createClient" method="POST" novalidate>
+        <div class="form-group">
+            <label for="productName">Nombre *</label>
+            <input type="text" id="productName" name="name" required>
+            <div class="error-message" id="errorName" style="color:red;">
+                {{#if errors.name}}{{errors.name}}{{/if}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="category">Email *</label>
+            <input type="text" id="category" name="category" required>
+            <div class="error-message" id="errorCategory" style="color:red;">
+                {{#if errors.category}}{{errors.category}}{{/if}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="price">Phone *</label>
+            <input type="number" id="price" name="price" step="0.01" min="0.01" required>
+            <div class="error-message" id="errorPrice" style="color:red;">
+                {{#if errors.price}}{{errors.price}}{{/if}}
+            </div>
+        </div>
+        <button type="submit" class="main-btn">Agregar cliente</button>
+        <a href="/clients?page=1" class="cancel-btn">Cancelar</a>
+    </form>
+    <script src="/js/clientAddValidation.js"></script>
+</main>

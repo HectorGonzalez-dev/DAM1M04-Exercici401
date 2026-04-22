@@ -1,0 +1,34 @@
+<main>
+    <h1 class="page-title">Editar cliente</h1>
+    <form id="addProductForm" action="/editClient" method="POST" novalidate>
+        <input type="hidden" name="id" value="{{prod_id}}">
+        <div class="form-group">
+            <label for="productName">Nombre *</label>
+            <input type="text" id="productName" name="name" required value="{{prod_info.name}}">
+            <div class="error-message" id="errorName" style="color:red;">
+                {{#if errors.name}}{{errors.name}}{{/if}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="category">Email *</label>
+            <input type="text" id="category" name="category" required value="{{prod_info.email}}">
+            <div class="error-message" id="errorCategory" style="color:red;">
+                {{#if errors.category}}{{errors.category}}{{/if}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="price">Phone *</label>
+            <input type="number" id="price" name="price" step="0.01" min="0.01" required value="{{prod_info.phone}}">
+            <div class="error-message" id="errorPrice" style="color:red;">
+                {{#if errors.price}}{{errors.price}}{{/if}}
+            </div>
+        </div>
+        <button type="submit" class="main-btn">Editar cliente</button>
+        <button type="submit" formaction="/deleteClient" formmethod="POST"
+                class="delete-btn">
+            Eliminar cliente
+        </button>
+        <a href="/clients?page=1" class="cancel-btn">Cancelar</a>
+    </form>
+    <script src="/js/clientAddValidation.js"></script>
+</main>

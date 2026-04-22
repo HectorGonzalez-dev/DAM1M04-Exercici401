@@ -495,34 +495,49 @@ app.get('/clientAdd', (req, res) => {
 // Crear producto
 app.post('/createClient', async (req, res) => {
   try {
-    const { name, category, price, stock, active } = req.body;
-    // Validación básica en backend
-    const errors = {};
-    if (!name || !name.trim()) errors.name = 'El nombre es obligatorio';
-    if (!category || !category.trim()) errors.category = 'La categoría es obligatoria';
-    const priceNum = parseFloat(price);
-    if (isNaN(priceNum) || priceNum <= 0) errors.price = 'El precio debe ser mayor que 0';
-    const stockNum = parseInt(stock);
-    if (isNaN(stockNum) || stockNum < 0 || !Number.isInteger(stockNum)) errors.stock = 'El stock debe ser un número entero mayor o igual a 0';
-    if (active !== '1' && active !== '0') errors.active = 'Seleccione si el producto está activo';
+    const { name, category, price} = req.body;
 
+    const errors = {};
+
+    // Nombre
+    if (!name || !name.trim()) {
+      errors.name = 'El nombre es obligatorio';
+    }
+
+    // Email
+    const email = category?.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      errors.category = 'El email es obligatorio';
+    } else if (!emailRegex.test(email)) {
+      errors.category = 'El formato del email no es válido';
+    }
+
+    // Teléfono
+    const phone = price?.trim();
+    const phoneRegex = /^[0-9+]{7,15}$/;
+    if (!phone) {
+      errors.price = 'El teléfono es obligatorio';
+    } else if (!phoneRegex.test(phone)) {
+      errors.price = 'El formato del teléfono no es válido';
+    }
+
+    // Si hay errores
     if (Object.keys(errors).length > 0) {
-      // Si hay errores, volver al formulario con errores
       const commonData = JSON.parse(
         fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
       );
+
       return res.status(400).render('clientAdd', {
         common: commonData,
         currentPage: 'Agregar cliente',
         errors,
-        form: { name, category, price, stock, active }
+        form: { name, category, price }
       });
     }
 
-    // Insertar en la base de datos
-    await db.query(
-      `INSERT INTO products (name, category, price, stock, active) VALUES ('${name.trim()}', '${category.trim()}', ${priceNum}, ${stockNum}, ${Number(active)})`
-    );
+    await db.query(`INSERT INTO customers (name, email, phone) VALUES ('${name.trim()}', '${email}', '${phone}')`);
+
     res.redirect('/clients?page=1');
   } catch (err) {
     console.error(err);
@@ -539,8 +554,8 @@ app.get('/clientEdit', async (req, res) => {
       return res.status(400).send('Paràmetre id invàlid')
     }
 
-    const prodInfo = await db.query(`SELECT name, category, price, stock, active FROM products WHERE id=${prodID}`);
-    const prodInfoJson = db.table_to_json(prodInfo, { name: 'string', category: 'string', price: 'number', stock: 'number', active: 'number' });
+    const prodInfo = await db.query(`SELECT name, email, phone FROM customers WHERE id=${prodID}`);
+    const prodInfoJson = db.table_to_json(prodInfo, { name: 'string', email: 'string', phone: 'number' });
 
     // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
     const commonData = JSON.parse(
@@ -570,17 +585,34 @@ app.post('/editClient', async (req, res) => {
   try {
     const id = parseInt(req.body.id, 10)
     const name = req.body.name
-    const category = req.body.category
-    const price = parseFloat(req.body.price)
-    const stock = parseInt(req.body.stock, 10)
-    const active = parseInt(req.body.active, 10)
+    const email = req.body.category
+    const phone = req.body.price
     // Validación básica en backend
     const errors = {};
-    if (!name || !name.trim()) errors.name = 'El nombre es obligatorio';
-    if (!category || !category.trim()) errors.category = 'La categoría es obligatoria';
-    if (isNaN(price) || price <= 0) errors.price = 'El precio debe ser mayor que 0';
-    if (isNaN(stock) || stock < 0 || !Number.isInteger(stock)) errors.stock = 'El stock debe ser un número entero mayor o igual a 0';
-    if (active !== 1 && active !== 0) errors.active = 'Seleccione si el producto está activo';
+    // Nombre
+    if (!name || !name.trim()) {
+      errors.name = 'El nombre es obligatorio';
+    }
+
+    // Email
+    const emailTrim = email?.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailTrim) {
+      errors.category = 'El email es obligatorio';
+    } else if (!emailRegex.test(emailTrim)) {
+      errors.category = 'El formato del email no es válido';
+    }
+
+    // Teléfono
+    const phoneTrim = phone?.trim();
+    const phoneRegex = /^[0-9+]{7,15}$/;
+
+    if (!phoneTrim) {
+      errors.price = 'El teléfono es obligatorio';
+    } else if (!phoneRegex.test(phoneTrim)) {
+      errors.price = 'El formato del teléfono no es válido';
+    }
 
     if (Object.keys(errors).length > 0) {
       // Si hay errores, volver al formulario con errores
@@ -591,14 +623,14 @@ app.post('/editClient', async (req, res) => {
         common: commonData,
         currentPage: 'Editar cliente',
         errors,
-        form: { name, category, price, stock, active }
+        form: { name, email, phone }
       });
     }
 
     // Insertar en la base de datos
     await db.query(`
-      UPDATE products
-      SET name = "${name}", category = "${category}", price = ${price}, stock = ${stock}, active = ${active}
+      UPDATE customers
+      SET name = "${name}", email = "${email}", phone = ${phone}
       WHERE id = ${id}
     `)
     res.redirect('/clients?page=1');
@@ -618,8 +650,7 @@ app.post('/deleteClient', async (req, res) => {
       return res.status(400).send('ID invalida')
     }
 
-    await db.query(`DELETE FROM sale_items WHERE product_id = ${id}`)
-    await db.query(`DELETE FROM products WHERE id = ${id}`)
+    await db.query(`DELETE FROM customers WHERE id = ${id}`)
 
     res.redirect('/clients?page=1')
 
