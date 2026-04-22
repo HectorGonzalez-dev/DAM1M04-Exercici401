@@ -1,6 +1,16 @@
 <main>
     <h1 class="page-title">Productos</h1>
-    <div style="margin-bottom: 1.5em;">
+
+    <div class="top-tabla-products" style="margin-bottom: 1.5em;">
+        <div class="top-tab toggle-colors-products" style="display:flex; align-items:center; gap:12px;">
+            <p style="margin:0;">Colores Stock</p>
+
+            <input type="checkbox" id="toggle-colors">
+
+            <label class="toggle" for="toggle-colors">
+                <span class="slider"></span>
+            </label>
+        </div>
         <a href="/productAdd" class="main-btn add-btn" style="float:right;">+ Nuevo producto</a>
         <div style="clear:both;"></div>
     </div>
@@ -30,7 +40,7 @@
                     <td>{{name}}</td>
                     <td>{{category}}</td>
                     <td>€ {{price}}</td>
-                    <td class="centered-cell
+                    <td class="centered-cell stock-cell
                         {{#if (gt stock 25)}}ok-stock
                         {{else if (gt stock 10)}}low-stock
                         {{else}}critic-stock{{/if}}">

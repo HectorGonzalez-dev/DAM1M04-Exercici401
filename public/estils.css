@@ -859,7 +859,7 @@ footer span {
     flex-direction: column;
     gap: 10px;
     font-size: 16px;
-    color: #363537;
+    color: var(--text);
 }
 
 /* Ajuste visual de KPI en cliente */
@@ -947,4 +947,17 @@ footer span {
 .kpi-stock-table tr:nth-child(even),
 .big-table tr:nth-child(even) {
     background-color: var(--surface-2);
+}
+
+.top-tabla-products {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-content: center;
+    gap: 20px;
+}
+
+.toggle-colors-products {
+    margin: 0;
+    align-self: center;
 }

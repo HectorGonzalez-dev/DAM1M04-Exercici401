@@ -1,66 +1,80 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // =========================
-    // VALIDACIÓN FORMULARIO
+    // VALIDACIÓN FORMULARIO (EDIT / ADD PRODUCT)
     // =========================
     const form = document.getElementById('addProductForm');
+
     if (form) {
         form.addEventListener('submit', (e) => {
             let valid = true;
 
+            // limpiar errores
             document.querySelectorAll('.error-message').forEach(el => {
                 el.textContent = '';
             });
 
-            const name = (form.productName?.value || form.name?.value || '').trim();
+            // =========================
+            // NAME
+            // =========================
+            const name = form.name.value.trim();
+
             if (!name) {
                 document.getElementById('errorName').textContent = 'El nombre es obligatorio';
                 valid = false;
+            } else if (name.length < 2) {
+                document.getElementById('errorName').textContent = 'El nombre es demasiado corto';
+                valid = false;
             }
 
-            const category = (form.category?.value || '').trim();
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            // =========================
+            // CATEGORY
+            // =========================
+            const category = form.category.value.trim();
 
             if (!category) {
                 document.getElementById('errorCategory').textContent = 'La categoría es obligatoria';
                 valid = false;
-            } else if (category.includes('@') && !emailRegex.test(category)) {
-                document.getElementById('errorCategory').textContent = 'Formato de email inválido';
+            } else if (category.length < 2) {
+                document.getElementById('errorCategory').textContent = 'La categoría es demasiado corta';
                 valid = false;
             }
 
-            const priceValue = (form.price?.value || '').trim();
-            const phoneRegex = /^[0-9+]{7,15}$/;
-            const priceNumber = parseFloat(priceValue);
+            // =========================
+            // PRICE
+            // =========================
+            const price = parseFloat(form.price.value);
 
-            if (!isNaN(priceNumber)) {
-                if (priceNumber <= 0) {
-                    document.getElementById('errorPrice').textContent = 'El precio debe ser mayor que 0';
-                    valid = false;
-                }
-            }
-
-            if (priceValue && !phoneRegex.test(priceValue)) {
-                document.getElementById('errorPrice').textContent = 'Formato de teléfono inválido';
+            if (isNaN(price)) {
+                document.getElementById('errorPrice').textContent = 'Precio inválido';
+                valid = false;
+            } else if (price <= 0) {
+                document.getElementById('errorPrice').textContent = 'El precio debe ser mayor que 0';
                 valid = false;
             }
 
-            if (!priceValue) {
-                document.getElementById('errorPrice').textContent = 'Este campo es obligatorio';
-                valid = false;
-            }
+            // =========================
+            // STOCK
+            // =========================
+            const stock = parseInt(form.stock.value, 10);
 
-            const stock = parseInt(form.stock?.value);
-            if (isNaN(stock) || stock < 0 || !Number.isInteger(stock)) {
+            if (isNaN(stock)) {
+                document.getElementById('errorStock').textContent = 'Stock inválido';
+                valid = false;
+            } else if (stock < 0 || !Number.isInteger(stock)) {
                 document.getElementById('errorStock').textContent =
-                    'El stock debe ser un número entero mayor o igual a 0';
+                    'El stock debe ser un entero mayor o igual a 0';
                 valid = false;
             }
 
-            const active = form.active?.value;
+            // =========================
+            // ACTIVE
+            // =========================
+            const active = form.active.value;
+
             if (active !== "1" && active !== "0") {
                 document.getElementById('errorActive').textContent =
-                    'Seleccione si el producto está activo';
+                    'Selecciona un estado válido';
                 valid = false;
             }
 
@@ -129,49 +143,54 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const saved = localStorage.getItem("theme");
-    if (saved && themes[saved]) {
-        const input = document.querySelector(`input[value="${saved}"]`);
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme && themes[savedTheme]) {
+        const input = document.querySelector(`input[value="${savedTheme}"]`);
         if (input) input.checked = true;
-        applyTheme(saved);
+        applyTheme(savedTheme);
     }
 
     // =========================
-    // TOGGLE COLORES STOCK
+    // TOGGLE STOCK COLORS (GLOBAL)
     // =========================
 
     const toggle = document.getElementById('toggle-colors');
 
-    function updateStockColors(enabled) {
-        const rows = document.querySelectorAll('.stock-table tr');
+    function applyStockColors(enabled) {
+        const stockCells = document.querySelectorAll('.stock-cell');
 
+        stockCells.forEach(cell => {
+            const stock = parseInt(cell.textContent.trim(), 10);
 
-        rows.forEach(row => {
-            const stockCell = row.querySelector('td:nth-child(3)');
-            if (!stockCell) return;
+            // limpiar siempre
+            cell.classList.remove('ok-stock', 'low-stock', 'critic-stock');
 
-            const stock = parseInt(stockCell.textContent.trim(), 10);
+            // si está desactivado, no aplicar colores
+            if (!enabled) return;
 
-            stockCell.classList.remove('ok-stock', 'low-stock', 'critic-stock');
-
-            if (!enabled) {
-                if (stock > 25) {
-                    stockCell.classList.add('ok-stock');
-                } else if (stock > 10) {
-                    stockCell.classList.add('low-stock');
-                } else {
-                    stockCell.classList.add('critic-stock');
-                }
+            if (stock > 25) {
+                cell.classList.add('ok-stock');
+            } else if (stock > 10) {
+                cell.classList.add('low-stock');
+            } else {
+                cell.classList.add('critic-stock');
             }
         });
     }
 
     if (toggle) {
-        toggle.addEventListener('change', () => {
-            updateStockColors(toggle.checked);
-        });
+        const saved = localStorage.getItem('stockColorsEnabled') === 'true';
 
-        updateStockColors(toggle.checked);
+        toggle.checked = saved;
+        applyStockColors(saved);
+
+        toggle.addEventListener('change', () => {
+            const enabled = toggle.checked;
+
+            localStorage.setItem('stockColorsEnabled', enabled);
+            applyStockColors(enabled);
+        });
     }
+
 
 });
