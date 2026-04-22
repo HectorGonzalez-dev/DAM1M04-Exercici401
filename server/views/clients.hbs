@@ -1,0 +1,57 @@
+<main>
+    <h1 class="page-title">Clientes</h1>
+    <div style="margin-bottom: 1.5em;">
+        <a href="/productAdd" class="main-btn add-btn" style="float:right;">+ Nuevo cliente</a>
+        <div style="clear:both;"></div>
+    </div>
+        <form id="searchForm" action="/clients" method="GET">
+            <div class="search-bar-div">
+                <button type="submit" form="searchForm" class="search-button">🔍</button>
+                <input type="hidden" name="page" value="1">
+                <input class="search-bar" type="text" name="search" placeholder="  Buscar..."/>
+                <a class="cancel-search" href="/clients?page=1">X</a>
+            </div>
+        </form>
+    <div class="container big-table-div">
+        <table class="big-table">
+
+            <thead>
+                <tr>
+                    <th style="text-align: left;">Nombre</th>
+                    <th style="text-align: left;">Email</th>
+                    <th style="text-align: left;">Teléfono</th>
+                    <th style="text-align: center;">Nº de compras</th>
+                    <th style="text-align: center;">Total gastado</th>
+                    <th style="text-align: center;">Acciones</th>
+                </tr>
+            </thead>
+            {{#each page_products}}
+                <tr>
+                    <td>{{nombre}}</td>
+                    <td>{{email}}</td>
+                    <td>{{telefono}}</td>
+                    <td class="centered-cell">{{numero_compras}}</td>
+                    <td class="centered-cell">{{total_gastado}}</td>
+                    <td class="centered-cell"><a class="edit-link" href="/productEdit?id={{id}}">Editar</a></td>
+                </tr>
+            {{/each}}
+        </table>
+    </div>
+    <div class="page-nav-container">
+        <div class="page-nav">
+            <a {{#unless (eq page_num 1)}}
+                href="/clients?page={{prev_page}}{{#if search_string}}&search={{search_string}}{{/if}}"
+                {{/unless}}
+                class="page-arrow {{#if (eq page_num 1)}}inactive-arrow{{/if}}">
+            &lt;
+            </a>
+            <p class="page-number">Página {{page_num}}</p>
+            <a {{#unless (eq page_num total_pages)}}
+                href="/clients?page={{next_page}}{{#if search_string}}&search={{search_string}}{{/if}}"
+                {{/unless}}
+                class="page-arrow {{#if (eq page_num total_pages)}}inactive-arrow{{/if}}">
+            &gt;
+            </a>
+        </div>
+    </div>
+</main>

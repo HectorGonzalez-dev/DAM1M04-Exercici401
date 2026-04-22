@@ -390,6 +390,245 @@ app.post('/deleteProduct', async (req, res) => {
   }
 })
 
+// -------------------------------------------------
+// Clientes
+// -------------------------------------------------
+
+app.get('/clients', async (req, res) => {
+  try {
+    const pageNum = parseInt(req.query.page, 10)
+    const searchString = req.query.search || "";
+
+    if (!Number.isInteger(pageNum) || pageNum <= 0) {
+      return res.status(400).send('Paràmetre id invàlid')
+    }
+
+    let pageProducts;
+    let totalProducts;
+    const offset = (pageNum - 1) * 10;
+
+    if (searchString.trim() === "") {
+        // Sin búsqueda
+        totalProducts = await db.query('SELECT COUNT(*) AS total FROM customers');
+        pageProducts = await db.query(`
+          SELECT 
+              c.id AS id,
+              c.name AS nombre,
+              c.email AS email,
+              c.phone AS telefono,
+              COUNT(s.id) AS numero_compras,
+              COALESCE(SUM(s.total), 0) AS total_gastado
+          FROM customers c
+          LEFT JOIN sales s ON c.id = s.customer_id
+          GROUP BY c.id, c.name, c.email, c.phone
+          ORDER BY total_gastado DESC
+          LIMIT 10 OFFSET ${offset}
+        `);
+    } else {
+        // Con búsqueda
+        totalProducts = await db.query(`
+          SELECT COUNT(*) AS total FROM customers
+          WHERE LOWER(name) LIKE LOWER('%${searchString}%')
+            OR LOWER(email) LIKE LOWER('%${searchString}%')
+        `);
+        pageProducts = await db.query(`
+          SELECT
+              c.id AS id,
+              c.name AS nombre,
+              c.email AS email,
+              c.phone AS telefono,
+              COUNT(s.id) AS numero_compras,
+              COALESCE(SUM(s.total), 0) AS total_gastado
+          FROM customers c
+          LEFT JOIN sales s ON c.id = s.customer_id
+          WHERE 
+              LOWER(c.name) LIKE LOWER('%${searchString}%')
+              OR LOWER(c.email) LIKE LOWER('%${searchString}%')
+          GROUP BY c.id, c.name, c.email, c.phone
+          ORDER BY total_gastado DESC
+          LIMIT 10 OFFSET ${offset}
+        `);
+    }
+    const totalPages = Math.ceil(Number(totalProducts[0].total) / 10);
+
+    const pageProductsJson = db.table_to_json(pageProducts, { id: 'number', nombre: 'string', email: 'string', telefono: 'string', numero_compras: 'number', total_gastado: 'number' });
+
+    // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
+    const commonData = JSON.parse(
+      fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+    );
+
+    // Construir l'objecte de dades per a la plantilla
+    const data = {
+      common: commonData,
+      page_products: pageProductsJson,
+      page_num: pageNum,
+      search_string: searchString,
+      prev_page: pageNum - 1,
+      next_page: pageNum + 1,
+      total_pages: totalPages
+    };
+
+    // Renderitzar la plantilla amb les dades
+    res.render('clients', {
+        ...data,
+        currentPage: 'Clientes',
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error consultant la base de dades');
+  }
+});
+
+// Mostrar formulario para agregar producto
+app.get('/clientAdd', (req, res) => {
+  // Leer datos comunes
+  const commonData = JSON.parse(
+    fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+  );
+  res.render('clientAdd', {
+    common: commonData,
+    currentPage: 'Agregar cliente',
+  });
+});
+
+// Crear producto
+app.post('/createClient', async (req, res) => {
+  try {
+    const { name, category, price, stock, active } = req.body;
+    // Validación básica en backend
+    const errors = {};
+    if (!name || !name.trim()) errors.name = 'El nombre es obligatorio';
+    if (!category || !category.trim()) errors.category = 'La categoría es obligatoria';
+    const priceNum = parseFloat(price);
+    if (isNaN(priceNum) || priceNum <= 0) errors.price = 'El precio debe ser mayor que 0';
+    const stockNum = parseInt(stock);
+    if (isNaN(stockNum) || stockNum < 0 || !Number.isInteger(stockNum)) errors.stock = 'El stock debe ser un número entero mayor o igual a 0';
+    if (active !== '1' && active !== '0') errors.active = 'Seleccione si el producto está activo';
+
+    if (Object.keys(errors).length > 0) {
+      // Si hay errores, volver al formulario con errores
+      const commonData = JSON.parse(
+        fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+      );
+      return res.status(400).render('clientAdd', {
+        common: commonData,
+        currentPage: 'Agregar cliente',
+        errors,
+        form: { name, category, price, stock, active }
+      });
+    }
+
+    // Insertar en la base de datos
+    await db.query(
+      `INSERT INTO products (name, category, price, stock, active) VALUES ('${name.trim()}', '${category.trim()}', ${priceNum}, ${stockNum}, ${Number(active)})`
+    );
+    res.redirect('/clients?page=1');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error al crear el producto');
+  }
+});
+
+// Mostrar formulario para agregar producto
+app.get('/clientEdit', async (req, res) => {
+  try {
+    const prodID = parseInt(req.query.id, 10)
+
+    if (!Number.isInteger(prodID) || prodID <= 0) {
+      return res.status(400).send('Paràmetre id invàlid')
+    }
+
+    const prodInfo = await db.query(`SELECT name, category, price, stock, active FROM products WHERE id=${prodID}`);
+    const prodInfoJson = db.table_to_json(prodInfo, { name: 'string', category: 'string', price: 'number', stock: 'number', active: 'number' });
+
+    // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
+    const commonData = JSON.parse(
+      fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+    );
+
+    // Construir l'objecte de dades per a la plantilla
+    const data = {
+      common: commonData,
+      prod_info: prodInfoJson[0],
+      prod_id: prodID
+    };
+
+    // Renderitzar la plantilla amb les dades
+    res.render('clientEdit', {
+        ...data,
+        currentPage: 'Editar cliente',
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error consultant la base de dades');
+  }
+});
+
+// Editar producto
+app.post('/editClient', async (req, res) => {
+  try {
+    const id = parseInt(req.body.id, 10)
+    const name = req.body.name
+    const category = req.body.category
+    const price = parseFloat(req.body.price)
+    const stock = parseInt(req.body.stock, 10)
+    const active = parseInt(req.body.active, 10)
+    // Validación básica en backend
+    const errors = {};
+    if (!name || !name.trim()) errors.name = 'El nombre es obligatorio';
+    if (!category || !category.trim()) errors.category = 'La categoría es obligatoria';
+    if (isNaN(price) || price <= 0) errors.price = 'El precio debe ser mayor que 0';
+    if (isNaN(stock) || stock < 0 || !Number.isInteger(stock)) errors.stock = 'El stock debe ser un número entero mayor o igual a 0';
+    if (active !== 1 && active !== 0) errors.active = 'Seleccione si el producto está activo';
+
+    if (Object.keys(errors).length > 0) {
+      // Si hay errores, volver al formulario con errores
+      const commonData = JSON.parse(
+        fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+      );
+      return res.status(400).render('clientEdit', {
+        common: commonData,
+        currentPage: 'Editar cliente',
+        errors,
+        form: { name, category, price, stock, active }
+      });
+    }
+
+    // Insertar en la base de datos
+    await db.query(`
+      UPDATE products
+      SET name = "${name}", category = "${category}", price = ${price}, stock = ${stock}, active = ${active}
+      WHERE id = ${id}
+    `)
+    res.redirect('/clients?page=1');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error al editar el producto');
+  }
+});
+
+app.post('/deleteClient', async (req, res) => {
+  try {
+
+    const id = parseInt(req.body.id, 10)
+
+    // Basic validation
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).send('ID invalida')
+    }
+
+    await db.query(`DELETE FROM sale_items WHERE product_id = ${id}`)
+    await db.query(`DELETE FROM products WHERE id = ${id}`)
+
+    res.redirect('/clients?page=1')
+
+  } catch (err) {
+    console.error(err)
+    res.status(500).send('Error esborrant el producte')
+  }
+})
+
 // Start server
 const httpServer = app.listen(port, () => {
   console.log(`http://localhost:${port}`);
