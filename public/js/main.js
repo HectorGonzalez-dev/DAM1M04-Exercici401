@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =========================
-    // THEMES (AQUÍ VA TU MENÚ)
+    // THEMES
     // =========================
 
     const themeForm = document.querySelector(".theme-form");
@@ -134,6 +134,44 @@ document.addEventListener('DOMContentLoaded', () => {
         const input = document.querySelector(`input[value="${saved}"]`);
         if (input) input.checked = true;
         applyTheme(saved);
+    }
+
+    // =========================
+    // TOGGLE COLORES STOCK
+    // =========================
+
+    const toggle = document.getElementById('toggle-colors');
+
+    function updateStockColors(enabled) {
+        const rows = document.querySelectorAll('.stock-table tr');
+
+
+        rows.forEach(row => {
+            const stockCell = row.querySelector('td:nth-child(3)');
+            if (!stockCell) return;
+
+            const stock = parseInt(stockCell.textContent.trim(), 10);
+
+            stockCell.classList.remove('ok-stock', 'low-stock', 'critic-stock');
+
+            if (!enabled) {
+                if (stock > 25) {
+                    stockCell.classList.add('ok-stock');
+                } else if (stock > 10) {
+                    stockCell.classList.add('low-stock');
+                } else {
+                    stockCell.classList.add('critic-stock');
+                }
+            }
+        });
+    }
+
+    if (toggle) {
+        toggle.addEventListener('change', () => {
+            updateStockColors(toggle.checked);
+        });
+
+        updateStockColors(toggle.checked);
     }
 
 });
