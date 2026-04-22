@@ -701,7 +701,7 @@ footer span {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 100%;
+    width: 800px;
     max-width: 600px;
     margin: 40px auto;
     margin-top: 0;
@@ -764,7 +764,7 @@ footer span {
     transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-#addProductForm .main-btn:hover {
+.main-btn:hover {
     background-color: #0a879b;
 }
 
@@ -806,4 +806,19 @@ footer span {
 
 .edit-link:hover {
     color: #0C9DB4;
+}
+
+.delete-btn {
+    height: 45px;
+    border: none;
+    border-radius: 12px;
+    background-color: #b4200c;
+    color: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.delete-btn:hover {
+    background-color: #9b0a0a;
 }

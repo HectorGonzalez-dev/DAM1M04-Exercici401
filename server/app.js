@@ -369,6 +369,27 @@ app.post('/editProduct', async (req, res) => {
   }
 });
 
+app.post('/deleteProduct', async (req, res) => {
+  try {
+
+    const id = parseInt(req.body.id, 10)
+
+    // Basic validation
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).send('ID invalida')
+    }
+
+    await db.query(`DELETE FROM sale_items WHERE product_id = ${id}`)
+    await db.query(`DELETE FROM products WHERE id = ${id}`)
+
+    res.redirect('/products?page=1')
+
+  } catch (err) {
+    console.error(err)
+    res.status(500).send('Error esborrant el producte')
+  }
+})
+
 // Start server
 const httpServer = app.listen(port, () => {
   console.log(`http://localhost:${port}`);

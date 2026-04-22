@@ -1,5 +1,5 @@
 <main>
-    <h1 class="page-title">Agregar nuevo producto</h1>
+    <h1 class="page-title">Editar producto</h1>
     <form id="addProductForm" action="/editProduct" method="POST" novalidate>
         <input type="hidden" name="id" value="{{prod_id}}">
         <div class="form-group">
@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="active">Activo *</label>
+            <label for="active">Activo</label>
             <select id="active" name="active" required>
                 <option value="1" {{#if (eq prod_info.active '1')}}selected{{/if}}>Sí</option>
                 <option value="0" {{#if (eq prod_info.active '0')}}selected{{/if}}>No</option>
@@ -41,6 +41,10 @@
             </div>
         </div>
         <button type="submit" class="main-btn">Editar producto</button>
+        <button type="submit" formaction="/deleteProduct" formmethod="POST"
+                class="delete-btn">
+            Eliminar producto
+        </button>
         <a href="/products?page=1" class="cancel-btn">Cancelar</a>
     </form>
     <script src="/js/productAddValidation.js"></script>
