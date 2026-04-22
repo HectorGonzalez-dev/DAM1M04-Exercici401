@@ -1,8 +1,13 @@
 <main>
     <h1 class="page-title">Productos</h1>
-    <div class="search-bar-div">
-
-    </div>
+        <form id="searchForm" action="/products" method="GET">
+            <div class="search-bar-div">
+                <button type="submit" form="searchForm" class="search-button">🔍</button>
+                <input type="hidden" name="page" value="1">
+                <input class="search-bar" type="text" name="search" placeholder="  Buscar..."/>
+                <a class="cancel-search" href="/products?page=1">X</a>
+            </div>
+        </form>
     <div class="container big-table-div">
         <table class="big-table">
 
@@ -35,9 +40,19 @@
     </div>
     <div class="page-nav-container">
         <div class="page-nav">
-            <a {{#unless (eq page_num 1)}}href="/products?page={{prev_page}}"{{/unless}} class="page-arrow {{#if (eq page_num 1)}}inactive-arrow{{/if}}">&lt;</a>
+            <a {{#unless (eq page_num 1)}}
+                href="/products?page={{prev_page}}{{#if search_string}}&search={{search_string}}{{/if}}"
+                {{/unless}}
+                class="page-arrow {{#if (eq page_num 1)}}inactive-arrow{{/if}}">
+            &lt;
+            </a>
             <p class="page-number">Página {{page_num}}</p>
-            <a {{#unless (eq page_num total_pages)}}href="/products?page={{next_page}}"{{/unless}} class="page-arrow {{#if (eq page_num total_pages)}}inactive-arrow{{/if}}">&gt;</a>
+            <a {{#unless (eq page_num total_pages)}}
+                href="/products?page={{next_page}}{{#if search_string}}&search={{search_string}}{{/if}}"
+                {{/unless}}
+                class="page-arrow {{#if (eq page_num total_pages)}}inactive-arrow{{/if}}">
+            &gt;
+            </a>
         </div>
     </div>
 </main>

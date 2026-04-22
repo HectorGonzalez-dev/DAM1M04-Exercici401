@@ -177,22 +177,42 @@ app.get('/products', async (req, res) => {
   try {
 
     const pageNum = parseInt(req.query.page, 10)
+    const searchString = req.query.search || "";
 
     if (!Number.isInteger(pageNum) || pageNum <= 0) {
       return res.status(400).send('Paràmetre id invàlid')
     }
 
-    const id_inicio = (pageNum - 1) * 10 + 1
-    const id_final = pageNum * 10
+    let pageProducts;
+    let totalProducts;
+    const offset = (pageNum - 1) * 10;
 
-    const totalProducts = await db.query('SELECT COUNT(*) AS total FROM products');
+    if (searchString.trim() === "") {
+        // Sin búsqueda
+        totalProducts = await db.query('SELECT COUNT(*) AS total FROM products');
+        pageProducts = await db.query(`
+          SELECT name, category, price, stock, active
+          FROM products
+          ORDER BY id
+          LIMIT 10 OFFSET ${offset}
+        `);
+    } else {
+        // Con búsqueda
+        totalProducts = await db.query(`
+          SELECT COUNT(*) AS total FROM products
+          WHERE LOWER(name) LIKE LOWER('%${searchString}%')
+            OR LOWER(category) LIKE LOWER('%${searchString}%')
+        `);
+        pageProducts = await db.query(`
+          SELECT name, category, price, stock, active
+          FROM products
+          WHERE LOWER(name) LIKE LOWER('%${searchString}%')
+            OR LOWER(category) LIKE LOWER('%${searchString}%')
+          LIMIT 10 OFFSET ${offset}
+        `);
+    }
     const totalPages = Math.ceil(Number(totalProducts[0].total) / 10);
-    const pageProducts = await db.query(`
-      SELECT name, category, price, stock, active
-      FROM products
-      WHERE id BETWEEN ${id_inicio} AND ${id_final}
-      ORDER BY id
-    `);
+
     const pageProductsJson = db.table_to_json(pageProducts, { name: 'string', category: 'string', price: 'number', stock: 'number', active: 'number' });
 
     // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
@@ -205,6 +225,7 @@ app.get('/products', async (req, res) => {
       common: commonData,
       page_products: pageProductsJson,
       page_num: pageNum,
+      search_string: searchString,
       prev_page: pageNum - 1,
       next_page: pageNum + 1,
       total_pages: totalPages
