@@ -95,11 +95,11 @@ main {
 }
 
 .nav-links li a:hover {
-    color: var(--accent);
+    color: var(--nav-hover);
 }
 
 .active {
-    border-bottom: 2px solid var(--accent);
+    border-bottom: 2px solid var(--nav-active);
     padding-bottom: 4px;
 }
 
