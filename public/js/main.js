@@ -100,7 +100,15 @@ document.addEventListener('DOMContentLoaded', () => {
             "--primary": "#0C9DB4",
             "--primary-hover": "#0a879b",
             "--accent": "#076877",
-            "--border": "#dcdcdc"
+            "--border": "#dcdcdc",
+            "--shadow": "0 2px 8px rgba(0, 0, 0, 0.08)",
+            "--shadow-strong": "0 6px 20px rgba(0, 0, 0, 0.18)",
+            "--critical-stock": "#c62828",
+            "--critical-stock-bg": "#FFCED2",
+            "--low-stock": "#a68b00",
+            "--low-stock-bg": "#FFF0C8",
+            "--normal-stock": "#388e3c",
+            "--normal-stock-bg": "#C8E7C8"
         },
 
         "noche-suave": {
@@ -110,10 +118,18 @@ document.addEventListener('DOMContentLoaded', () => {
             "--surface-2": "#23252c",
             "--nav-active": "#00b05e",
             "--nav-hover": "#00914d",
-            "--primary": "#7aa2f7",
-            "--primary-hover": "#5f8df0",
-            "--accent": "#537cd4",
-            "--border": "#3a3d46"
+            "--primary": "#6f8fcf",
+            "--primary-hover": "#5f7fc0",
+            "--accent": "#4f6fb5",
+            "--border": "#3a3d46",
+            "--shadow": "0 2px 15px rgba(0, 0, 0, 0.2)",
+            "--shadow-strong": "0 6px 20px rgba(0, 0, 0, 0.18)",
+            "--critical-stock": "#cf6679",
+            "--critical-stock-bg": "#2a1b1f",
+            "--low-stock": "#c7a94a",
+            "--low-stock-bg": "#2a2616",
+            "--normal-stock": "#81c784",
+            "--normal-stock-bg": "#1b2a1d"
         },
 
         "alto-contraste": {
@@ -126,7 +142,15 @@ document.addEventListener('DOMContentLoaded', () => {
             "--primary": "#cc871f",
             "--primary-hover": "#c7821a",
             "--accent": "#b87614",
-            "--border": "#ffffff"
+            "--border": "#ffffff",
+            "--shadow": "0 2px 8px rgba(0, 0, 0, 0.08)",
+            "--shadow-strong": "0 6px 20px rgba(0, 0, 0, 0.18)",
+            "--critical-stock": "#c62828",
+            "--critical-stock-bg": "#FFCED2",
+            "--low-stock": "#a68b00",
+            "--low-stock-bg": "#FFF0C8",
+            "--normal-stock": "#388e3c",
+            "--normal-stock-bg": "#C8E7C8"
         }
     };
 
