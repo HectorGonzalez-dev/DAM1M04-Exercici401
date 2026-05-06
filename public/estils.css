@@ -38,6 +38,9 @@
     --low-stock-bg: #FFF0C8;
     --normal-stock: #388e3c;
     --normal-stock-bg: #C8E7C8;
+
+    --search-bar-bg: #E5E5E6;
+    --search-bar-btn-bg: #D3D3D3;
 }
 
 body {
@@ -667,7 +670,7 @@ footer span {
 .page-arrow {
     display: flex;
     background-color: var(--primary);
-    color: #363537;
+    color: #ffffff;
     flex-wrap: wrap;
     justify-content: center;
     align-content: center;
@@ -690,6 +693,7 @@ footer span {
     justify-content: center;
     align-content: center;
     text-align: center;
+    color: #ffffff;
     margin: 0;
     height: 100%;
     width: 60%;
@@ -704,7 +708,8 @@ footer span {
 }
 
 .search-button {
-    background-color: rgb(211, 211, 211);
+    background-color: var(--search-bar-btn-bg);
+    color: var(--text);
     height: 100%;
     width: 5%;
     border: none;
@@ -712,7 +717,8 @@ footer span {
 }
 
 .search-bar {
-    background-color: rgb(229, 229, 230);
+    background-color: var(--search-bar-bg);
+    color: var(--text);
     height: 100%;
     width: 90%;
     border: none;
@@ -722,11 +728,11 @@ footer span {
 .cancel-search {
     display: flex;
     flex-wrap: wrap;
-    background-color: rgb(211, 211, 211);
+    background-color: var(--search-bar-btn-bg);
     text-decoration: none;
     user-select: none;
     cursor: pointer;
-    color: #363537;
+    color: var(--text);
     height: 100%;
     width: 5%;
     align-content: center;
@@ -746,7 +752,7 @@ footer span {
     margin: 40px auto;
     margin-top: 0;
     padding: 30px;
-    background-color: rgb(245 247 249);
+    background-color: var(--surface);
     border-radius: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     box-sizing: border-box;
@@ -761,7 +767,7 @@ footer span {
 
 #addProductForm label {
     font-weight: 600;
-    color: #363537;
+    color: var(--text);
     font-size: 14px;
 }
 
@@ -775,7 +781,8 @@ footer span {
     font-family: 'Baloo 2', sans-serif;
     font-size: 14px;
     outline: none;
-    background-color: #ffffff;
+    background-color: var(--surface-2);
+    color: var(--text);
     transition: border 0.2s ease, box-shadow 0.2s ease;
 }
 

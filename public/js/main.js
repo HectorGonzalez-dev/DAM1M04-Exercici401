@@ -108,7 +108,9 @@ document.addEventListener('DOMContentLoaded', () => {
             "--low-stock": "#a68b00",
             "--low-stock-bg": "#FFF0C8",
             "--normal-stock": "#388e3c",
-            "--normal-stock-bg": "#C8E7C8"
+            "--normal-stock-bg": "#C8E7C8",
+            "--search-bar-bg": "#E5E5E6",
+            "--search-bar-btn-bg": "#D3D3D3"
         },
 
         "noche-suave": {
@@ -129,7 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
             "--low-stock": "#c7a94a",
             "--low-stock-bg": "#2a2616",
             "--normal-stock": "#81c784",
-            "--normal-stock-bg": "#1b2a1d"
+            "--normal-stock-bg": "#1b2a1d",
+            "--search-bar-bg": "#2B2B2D",
+            "--search-bar-btn-bg": "#3A3A3D"
         },
 
         "alto-contraste": {
@@ -140,17 +144,19 @@ document.addEventListener('DOMContentLoaded', () => {
             "--nav-active": "#00ff88",
             "--nav-hover": "#00ff88",
             "--primary": "#ff9900",
-            "--primary-hover": "#fab700",
+            "--primary-hover": "#ca7d09",
             "--accent": "#ffd000",
             "--border": "#ffffff",
             "--shadow": "0 2px 8px rgba(0, 0, 0, 0.08)",
             "--shadow-strong": "0 6px 20px rgba(0, 0, 0, 0.18)",
-            "--critical-stock": "#c62828",
-            "--critical-stock-bg": "#FFCED2",
-            "--low-stock": "#a68b00",
-            "--low-stock-bg": "#FFF0C8",
-            "--normal-stock": "#388e3c",
-            "--normal-stock-bg": "#C8E7C8"
+            "--critical-stock": "#ff4d4f",
+            "--critical-stock-bg": "#3a0b0c",
+            "--low-stock": "#ffd600",
+            "--low-stock-bg": "#332900",
+            "--normal-stock": "#4caf50",
+            "--normal-stock-bg": "#0f2e12",
+            "--search-bar-bg": "#303030",
+            "--search-bar-btn-bg": "#131313"
         }
     };
 
