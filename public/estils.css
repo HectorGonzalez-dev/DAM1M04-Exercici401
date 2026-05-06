@@ -743,7 +743,9 @@ footer span {
    ADD PRODUCT PAGE ONLY
    ========================= */
 
-#addProductForm {
+#addProductForm,
+#addClientForm,
+#editClientForm {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -759,13 +761,17 @@ footer span {
 }
 
 /* Campos */
-#addProductForm .form-group {
+#addProductForm .form-group,
+#addClientForm .form-group,
+#editClientForm .form-group {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-#addProductForm label {
+#addProductForm label,
+#addClientForm label,
+#editClientForm label {
     font-weight: 600;
     color: var(--text);
     font-size: 14px;
@@ -773,7 +779,11 @@ footer span {
 
 /* Inputs y select */
 #addProductForm input,
-#addProductForm select {
+#addProductForm select,
+#addClientForm input,
+#addClientForm select,
+#editClientForm input,
+#editClientForm select {
     height: 40px;
     border: 1px solid #dcdcdc;
     border-radius: 10px;
@@ -787,13 +797,19 @@ footer span {
 }
 
 #addProductForm input:focus,
-#addProductForm select:focus {
+#addProductForm select:focus,
+#addClientForm input:focus,
+#addClientForm select:focus,
+#editClientForm input:focus,
+#editClientForm select:focus {
     border-color: #0C9DB4;
     box-shadow: 0 0 0 3px rgba(12, 157, 180, 0.15);
 }
 
 /* Errores */
-#addProductForm .error-message {
+#addProductForm .error-message,
+#addClientForm .error-message,
+#editClientForm .error-message {
     font-size: 12px;
     min-height: 16px;
     color: #c62828;
@@ -815,12 +831,16 @@ footer span {
     background-color: var(--primary-hover);
 }
 
-#addProductForm .main-btn:active {
+#addProductForm .main-btn:active,
+#addClientForm .main-btn:active,
+#editClientForm .main-btn:active {
     transform: scale(0.98);
 }
 
 /* Cancelar */
-#addProductForm .cancel-btn {
+#addProductForm .cancel-btn,
+#addClientForm .cancel-btn,
+#editClientForm .cancel-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -833,7 +853,9 @@ footer span {
     transition: background-color 0.2s ease;
 }
 
-#addProductForm .cancel-btn:hover {
+#addProductForm .cancel-btn:hover,
+#addClientForm .cancel-btn:hover,
+#editClientForm .cancel-btn:hover {
     background-color: rgb(211, 211, 212);
 }
 
@@ -941,12 +963,20 @@ footer span {
 }
 
 #addProductForm input,
-#addProductForm select {
+#addProductForm select,
+#addClientForm input,
+#addClientForm select,
+#editClientForm input,
+#editClientForm select {
     border: 1px solid var(--border);
 }
 
 #addProductForm input:focus,
-#addProductForm select:focus {
+#addProductForm select:focus,
+#addClientForm input:focus,
+#addClientForm select:focus,
+#editClientForm input:focus,
+#editClientForm select:focus {
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(12, 157, 180, 0.15);
 }

@@ -1,25 +1,25 @@
 <main>
     <h1 class="page-title">Agregar nuevo cliente</h1>
-    <form id="addProductForm" action="/createClient" method="POST" novalidate>
+    <form id="addClientForm" action="/createClient" method="POST" novalidate>
         <div class="form-group">
-            <label for="productName">Nombre *</label>
-            <input type="text" id="productName" name="name" required>
+            <label for="clientName">Nombre *</label>
+            <input type="text" id="clientName" name="name" required>
             <div class="error-message" id="errorName" style="color:red;">
                 {{#if errors.name}}{{errors.name}}{{/if}}
             </div>
         </div>
         <div class="form-group">
-            <label for="category">Email *</label>
-            <input type="text" id="category" name="category" required>
-            <div class="error-message" id="errorCategory" style="color:red;">
-                {{#if errors.category}}{{errors.category}}{{/if}}
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" required>
+            <div class="error-message" id="errorEmail" style="color:red;">
+                {{#if errors.email}}{{errors.email}}{{/if}}
             </div>
         </div>
         <div class="form-group">
-            <label for="price">Phone *</label>
-            <input type="number" id="price" name="price" step="0.01" min="0.01" required>
-            <div class="error-message" id="errorPrice" style="color:red;">
-                {{#if errors.price}}{{errors.price}}{{/if}}
+            <label for="phone">Phone *</label>
+            <input type="tel" id="phone" name="phone" required>
+            <div class="error-message" id="errorPhone" style="color:red;">
+                {{#if errors.phone}}{{errors.phone}}{{/if}}
             </div>
         </div>
         <button type="submit" class="main-btn">Agregar cliente</button>

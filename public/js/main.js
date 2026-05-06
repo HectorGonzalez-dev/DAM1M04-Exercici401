@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // =========================
-    // VALIDACIÓN FORMULARIO (EDIT / ADD PRODUCT)
+    // VALIDACIÓN FORMULARIO (EDIT / ADD PRODUCT / CLIENT)
     // =========================
-    const form = document.getElementById('addProductForm');
+    const form = document.getElementById('addProductForm') || document.getElementById('editClientForm') || document.getElementById('addClientForm');
 
     if (form) {
         form.addEventListener('submit', (e) => {
@@ -28,54 +28,87 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // =========================
-            // CATEGORY
+            // EMAIL (for client) or CATEGORY (for product)
             // =========================
-            const category = form.category.value.trim();
+            const email = form.email?.value.trim();
+            const category = form.category?.value.trim();
 
-            if (!category) {
-                document.getElementById('errorCategory').textContent = 'La categoría es obligatoria';
-                valid = false;
-            } else if (category.length < 2) {
-                document.getElementById('errorCategory').textContent = 'La categoría es demasiado corta';
-                valid = false;
+            if (email !== undefined) {
+                // Client form
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!email) {
+                    document.getElementById('errorEmail').textContent = 'El email es obligatorio';
+                    valid = false;
+                } else if (!emailRegex.test(email)) {
+                    document.getElementById('errorEmail').textContent = 'El formato del email no es válido';
+                    valid = false;
+                }
+            } else if (category !== undefined) {
+                // Product form
+                if (!category) {
+                    document.getElementById('errorCategory').textContent = 'La categoría es obligatoria';
+                    valid = false;
+                } else if (category.length < 2) {
+                    document.getElementById('errorCategory').textContent = 'La categoría es demasiado corta';
+                    valid = false;
+                }
             }
 
             // =========================
-            // PRICE
+            // PHONE (for client) or PRICE (for product)
             // =========================
-            const price = parseFloat(form.price.value);
+            const phone = form.phone?.value.trim();
+            const price = form.price?.value;
 
-            if (isNaN(price)) {
-                document.getElementById('errorPrice').textContent = 'Precio inválido';
-                valid = false;
-            } else if (price <= 0) {
-                document.getElementById('errorPrice').textContent = 'El precio debe ser mayor que 0';
-                valid = false;
+            if (phone !== undefined) {
+                // Client form
+                const phoneRegex = /^[0-9+]{7,15}$/;
+                if (!phone) {
+                    document.getElementById('errorPhone').textContent = 'El teléfono es obligatorio';
+                    valid = false;
+                } else if (!phoneRegex.test(phone)) {
+                    document.getElementById('errorPhone').textContent = 'El formato del teléfono no es válido';
+                    valid = false;
+                }
+            } else if (price !== undefined) {
+                // Product form
+                const priceNum = parseFloat(price);
+                if (isNaN(priceNum)) {
+                    document.getElementById('errorPrice').textContent = 'Precio inválido';
+                    valid = false;
+                } else if (priceNum <= 0) {
+                    document.getElementById('errorPrice').textContent = 'El precio debe ser mayor que 0';
+                    valid = false;
+                }
             }
 
             // =========================
-            // STOCK
+            // STOCK (only for product forms)
             // =========================
-            const stock = parseInt(form.stock.value, 10);
+            if (form.stock) {
+                const stock = parseInt(form.stock.value, 10);
 
-            if (isNaN(stock)) {
-                document.getElementById('errorStock').textContent = 'Stock inválido';
-                valid = false;
-            } else if (stock < 0 || !Number.isInteger(stock)) {
-                document.getElementById('errorStock').textContent =
-                    'El stock debe ser un entero mayor o igual a 0';
-                valid = false;
+                if (isNaN(stock)) {
+                    document.getElementById('errorStock').textContent = 'Stock inválido';
+                    valid = false;
+                } else if (stock < 0 || !Number.isInteger(stock)) {
+                    document.getElementById('errorStock').textContent =
+                        'El stock debe ser un entero mayor o igual a 0';
+                    valid = false;
+                }
             }
 
             // =========================
-            // ACTIVE
+            // ACTIVE (only for product forms)
             // =========================
-            const active = form.active.value;
+            if (form.active) {
+                const active = form.active.value;
 
-            if (active !== "1" && active !== "0") {
-                document.getElementById('errorActive').textContent =
-                    'Selecciona un estado válido';
-                valid = false;
+                if (active !== "1" && active !== "0") {
+                    document.getElementById('errorActive').textContent =
+                        'Selecciona un estado válido';
+                    valid = false;
+                }
             }
 
             if (!valid) e.preventDefault();

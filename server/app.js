@@ -495,7 +495,7 @@ app.get('/clientAdd', (req, res) => {
 // Crear producto
 app.post('/createClient', async (req, res) => {
   try {
-    const { name, category, price} = req.body;
+    const { name, email, phone } = req.body;
 
     const errors = {};
 
@@ -505,21 +505,21 @@ app.post('/createClient', async (req, res) => {
     }
 
     // Email
-    const email = category?.trim();
+    const emailTrim = email?.trim();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) {
-      errors.category = 'El email es obligatorio';
-    } else if (!emailRegex.test(email)) {
-      errors.category = 'El formato del email no es válido';
+    if (!emailTrim) {
+      errors.email = 'El email es obligatorio';
+    } else if (!emailRegex.test(emailTrim)) {
+      errors.email = 'El formato del email no es válido';
     }
 
     // Teléfono
-    const phone = price?.trim();
+    const phoneTrim = phone?.trim();
     const phoneRegex = /^[0-9+]{7,15}$/;
-    if (!phone) {
-      errors.price = 'El teléfono es obligatorio';
-    } else if (!phoneRegex.test(phone)) {
-      errors.price = 'El formato del teléfono no es válido';
+    if (!phoneTrim) {
+      errors.phone = 'El teléfono es obligatorio';
+    } else if (!phoneRegex.test(phoneTrim)) {
+      errors.phone = 'El formato del teléfono no es válido';
     }
 
     // Si hay errores
@@ -532,11 +532,11 @@ app.post('/createClient', async (req, res) => {
         common: commonData,
         currentPage: 'Agregar cliente',
         errors,
-        form: { name, category, price }
+        form: { name, email, phone }
       });
     }
 
-    await db.query(`INSERT INTO customers (name, email, phone) VALUES ('${name.trim()}', '${email}', '${phone}')`);
+    await db.query(`INSERT INTO customers (name, email, phone) VALUES ('${name.trim()}', '${emailTrim}', '${phoneTrim}')`);
 
     res.redirect('/clients?page=1');
   } catch (err) {
@@ -548,14 +548,14 @@ app.post('/createClient', async (req, res) => {
 // Mostrar formulario para agregar producto
 app.get('/clientEdit', async (req, res) => {
   try {
-    const prodID = parseInt(req.query.id, 10)
+    const clientID = parseInt(req.query.id, 10)
 
-    if (!Number.isInteger(prodID) || prodID <= 0) {
+    if (!Number.isInteger(clientID) || clientID <= 0) {
       return res.status(400).send('Paràmetre id invàlid')
     }
 
-    const prodInfo = await db.query(`SELECT name, email, phone FROM customers WHERE id=${prodID}`);
-    const prodInfoJson = db.table_to_json(prodInfo, { name: 'string', email: 'string', phone: 'number' });
+    const clientInfo = await db.query(`SELECT name, email, phone FROM customers WHERE id=${clientID}`);
+    const clientInfoJson = db.table_to_json(clientInfo, { name: 'string', email: 'string', phone: 'number' });
 
     // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
     const commonData = JSON.parse(
@@ -565,8 +565,8 @@ app.get('/clientEdit', async (req, res) => {
     // Construir l'objecte de dades per a la plantilla
     const data = {
       common: commonData,
-      prod_info: prodInfoJson[0],
-      prod_id: prodID
+      client_info: clientInfoJson[0],
+      client_id: clientID
     };
 
     // Renderitzar la plantilla amb les dades
@@ -585,8 +585,8 @@ app.post('/editClient', async (req, res) => {
   try {
     const id = parseInt(req.body.id, 10)
     const name = req.body.name
-    const email = req.body.category
-    const phone = req.body.price
+    const email = req.body.email
+    const phone = req.body.phone
     // Validación básica en backend
     const errors = {};
     // Nombre
@@ -599,9 +599,9 @@ app.post('/editClient', async (req, res) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailTrim) {
-      errors.category = 'El email es obligatorio';
+      errors.email = 'El email es obligatorio';
     } else if (!emailRegex.test(emailTrim)) {
-      errors.category = 'El formato del email no es válido';
+      errors.email = 'El formato del email no es válido';
     }
 
     // Teléfono
@@ -609,9 +609,9 @@ app.post('/editClient', async (req, res) => {
     const phoneRegex = /^[0-9+]{7,15}$/;
 
     if (!phoneTrim) {
-      errors.price = 'El teléfono es obligatorio';
+      errors.phone = 'El teléfono es obligatorio';
     } else if (!phoneRegex.test(phoneTrim)) {
-      errors.price = 'El formato del teléfono no es válido';
+      errors.phone = 'El formato del teléfono no es válido';
     }
 
     if (Object.keys(errors).length > 0) {
@@ -623,7 +623,8 @@ app.post('/editClient', async (req, res) => {
         common: commonData,
         currentPage: 'Editar cliente',
         errors,
-        form: { name, email, phone }
+        client_info: { name, email, phone },
+        client_id: id
       });
     }
 
